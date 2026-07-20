@@ -434,6 +434,7 @@ const CSTournament = () => {
             <div className="flex gap-3 mt-7">
 
               <button
+              onClick={() => navigate("/detail")}
                 className="flex-1 py-3 rounded-2xl border border-violet-500 text-violet-400 hover:bg-violet-500 hover:text-white transition"
               >
                 Details

@@ -481,7 +481,9 @@ const LWTournament = () => {
 
             <div className="flex gap-3 mt-7">
 
-              <button className="flex-1 py-3 rounded-2xl border border-red-500 text-red-400 hover:bg-red-500 hover:text-white transition">
+              <button
+              onClick={() => navigate("/detail")}
+              className="flex-1 py-3 rounded-2xl border border-red-500 text-red-400 hover:bg-red-500 hover:text-white transition">
 
                 Details
 
