@@ -123,7 +123,7 @@ const BRTournament = () => {
 
   return (
 
-    <div className="min-h-screen bg-[#09090F] text-white pb-20">
+    <div className="min-h-screen bg-[#09090F] text-white pb-40">
 
       {/* ===============================
           TOP HEADER
