@@ -12,13 +12,14 @@ export const Login = async (req, res) => {
     }
     try {
         const user = await User.findOne({ email });
-        const userWithoutPassword = await User.findById(user._id).select("-password");
+
         if (!user) {
             return res.status(401).json({
                 msg: "invalid email or password",
                 success: false
             })
         }
+        const userWithoutPassword = await User.findById(user._id).select("-password");
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) {
             return res.status(401).json({
@@ -45,13 +46,13 @@ export const Login = async (req, res) => {
                 res.status(200).json({
                     msg: "login done",
                     success: true,
-                    user:userWithoutPassword
+                    user: userWithoutPassword
                 })
             })
     } catch (error) {
         return res.status(500).json({
             success: false,
-            msg: "Internal Server Error"
+            msg: error
         })
     }
 } 
