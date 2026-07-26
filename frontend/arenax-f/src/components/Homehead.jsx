@@ -7,9 +7,9 @@ const Homehead = () => {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 border-b border-zinc-800/50 bg-[#09090B]/90 backdrop-blur-xl"
+      className="sticky top-0 z-50 border-b w-full border-zinc-800/50 bg-[#09090B]/90 backdrop-blur-xl"
     >
-      <div className="mx-auto flex h-20 items-center justify-between px-5">
+      <div className="mx-auto flex h-20 items-center w-full justify-between px-5">
 
         {/* Logo */}
         <div className="flex items-center gap-3">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../img/logo.png";
 import {
     FaEnvelope,
@@ -8,14 +8,35 @@ import {
     FaEye,
     FaEyeSlash,
 } from "react-icons/fa";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
-
+    const navigate = useNavigate()
+    const {setUser}=useContext(AuthContext)
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
+
+    const handleSubmit = async () => {
+        const res = await fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        let result = await res.json();
+        if (result.success) {
+            setUser(result.user)
+            navigate("/home")
+        } else {
+            alert("Enter Vaild Email Or Password")
+        }
+    }
 
     return (
         <div className="min-h-screen bg-[#0B0B11] flex items-center justify-center px-5 py-10">
@@ -149,6 +170,7 @@ const Login = () => {
                     {/* Login Button */}
 
                     <motion.button
+                        onClick={handleSubmit}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.97 }}
                         className="w-full h-14 rounded-2xl bg-linear-to-r from-violet-600 to-fuchsia-600 text-white font-semibold shadow-[0_0_35px_rgba(139,92,246,.35)]"

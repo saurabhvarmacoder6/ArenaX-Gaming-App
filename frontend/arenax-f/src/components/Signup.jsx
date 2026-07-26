@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import logo from "../img/logo.png";
 import {
     FaUser,
@@ -15,15 +17,34 @@ import {
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+    const navigate = useNavigate()
+    const { setUser } = useContext(AuthContext)
     const [formData, setFormData] = useState({
-        fullName: "",
+        name: "",
         email: "",
         gameName: "",
-        gameUID: "",
-        password: "",
-        confirmPassword: "",
+        uid: "",
+        password: ""
     });
+
+    const handleSubmit = async () => {
+        const res = await fetch("http://localhost:5000/api/auth/signup", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        let result = await res.json();
+        if (result.success) {
+            console.log(result.user);
+            setUser(result.user)
+            navigate("/home")
+        } else {
+            alert("Enter Vaild Data")
+        }
+    }
 
     return (
         <div className="min-h-screen bg-[#0B0B11] flex items-center justify-center px-5 py-10">
@@ -85,11 +106,11 @@ const Signup = () => {
                             <input
                                 type="text"
                                 placeholder="Enter your full name"
-                                value={formData.fullName}
+                                value={formData.name}
                                 onChange={(e) =>
                                     setFormData({
                                         ...formData,
-                                        fullName: e.target.value,
+                                        name: e.target.value,
                                     })
                                 }
                                 className="bg-transparent outline-none text-white w-full placeholder:text-gray-500"
@@ -172,11 +193,11 @@ const Signup = () => {
                             <input
                                 type="number"
                                 placeholder="Enter your UID"
-                                value={formData.gameUID}
+                                value={formData.uid}
                                 onChange={(e) =>
                                     setFormData({
                                         ...formData,
-                                        gameUID: e.target.value,
+                                        uid: e.target.value,
                                     })
                                 }
                                 className="bg-transparent outline-none text-white w-full placeholder:text-gray-500"
@@ -226,48 +247,6 @@ const Signup = () => {
 
                     </div>
 
-                    {/* Confirm Password */}
-
-                    <div>
-
-                        <label className="text-sm text-gray-300">
-                            Confirm Password
-                        </label>
-
-                        <div className="mt-2 flex items-center gap-3 rounded-2xl bg-[#181824] border border-white/10 px-4 h-14">
-
-                            <FaLock className="text-violet-400" />
-
-                            <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                placeholder="Confirm password"
-                                value={formData.confirmPassword}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        confirmPassword: e.target.value,
-                                    })
-                                }
-                                className="bg-transparent outline-none text-white w-full placeholder:text-gray-500"
-                            />
-
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    setShowConfirmPassword(!showConfirmPassword)
-                                }
-                            >
-                                {showConfirmPassword ? (
-                                    <FaEyeSlash className="text-gray-400" />
-                                ) : (
-                                    <FaEye className="text-gray-400" />
-                                )}
-                            </button>
-
-                        </div>
-
-                    </div>
-
                     {/* Password Strength */}
 
                     <div className="space-y-2">
@@ -288,10 +267,10 @@ const Signup = () => {
                                 }}
                                 transition={{ duration: .3 }}
                                 className={`h-full rounded-full ${formData.password.length < 6
-                                        ? "bg-red-500"
-                                        : formData.password.length < 8
-                                            ? "bg-yellow-400"
-                                            : "bg-green-500"
+                                    ? "bg-red-500"
+                                    : formData.password.length < 8
+                                        ? "bg-yellow-400"
+                                        : "bg-green-500"
                                     }`}
                             />
 
@@ -316,6 +295,7 @@ const Signup = () => {
                     <motion.button
                         whileTap={{ scale: .97 }}
                         whileHover={{ scale: 1.02 }}
+                        onClick={handleSubmit}
                         className="w-full h-14 rounded-2xl bg-linear-to-r from-violet-600 to-fuchsia-600 text-white font-semibold shadow-[0_0_35px_rgba(139,92,246,.35)]"
                     >
                         Create Account

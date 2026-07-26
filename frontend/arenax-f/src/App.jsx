@@ -10,27 +10,36 @@ import Wallet from './bottompages/Wallet'
 import Signup from './components/Signup'
 import Login from './components/Login'
 import ForgotPassword from './components/ForgotPassword'
+import ProtectedRoute from './context/ProtectedRoute'
+import PublicRoute from './context/PublicRoute'
+import Profile from './components/Profile'
 function App() {
 
   const location = useLocation();
   const hideBottomNav = ["/", "/signup", "/login", "/forgot-password"].includes(location.pathname);
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-[#09090B]">
+    <div className="flex min-h-screen items-center justify-center bg-[#09090B]">
       <Routes>
-        <Route path="/" element={<Splash />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/br" element={<BRTournaments />} />
-        <Route path="/cs" element={<CSTournaments />} />
-        <Route path="/lw" element={<LWTournaments />} />
-        <Route path="/detail" element={<TournamentDetails />} />
-        <Route path="/wallet" element={<Wallet />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        {/* <Route path="/detail" element={<TournamentDetails />} />
-        <Route path="/detail" element={<TournamentDetails />} /> */}
+
+        <Route element={<PublicRoute />}>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Splash />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/br" element={<BRTournaments />} />
+          <Route path="/cs" element={<CSTournaments />} />
+          <Route path="/lw" element={<LWTournaments />} />
+          <Route path="/detail" element={<TournamentDetails />} />
+          <Route path="/wallet" element={<Wallet />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
+
       </Routes>
-      {!hideBottomNav && <BottomNav/>}
+      {!hideBottomNav && <BottomNav />}
     </div>
   )
 }
