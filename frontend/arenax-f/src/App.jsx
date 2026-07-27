@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#09090B]">
       <Routes>
-
+        <Route path="/" element={<Splash />} />
         <Route element={<PublicRoute />}>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -28,7 +28,6 @@ function App() {
         </Route>
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Splash />} />
           <Route path="/home" element={<Home />} />
           <Route path="/br" element={<BRTournaments />} />
           <Route path="/cs" element={<CSTournaments />} />
