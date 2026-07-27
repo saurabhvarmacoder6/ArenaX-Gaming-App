@@ -66,7 +66,7 @@ export default function Profile() {
                                 ArenaX Player
                             </span>
 
-                            <h2 className="mt-4 text-3xl font-extrabold tracking-wide">
+                            <h2 className="mt-4 sm:text-3xl text-xl font-extrabold tracking-wide">
                                 {user?.name}
                             </h2>
 
@@ -90,7 +90,7 @@ export default function Profile() {
                         initial={{ opacity: 0, y: 25 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: .2 }}
-                        className="mt-6 bg-[#171722] rounded-3xl border border-white/10 overflow-hidden"
+                        className="mt-6 bg-[#171722] text-sm sm:text-xl rounded-3xl border border-white/10 overflow-hidden"
                     >
 
                         <MenuItem
