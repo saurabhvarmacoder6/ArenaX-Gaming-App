@@ -28,7 +28,7 @@ const Signup = () => {
     });
 
     const handleSubmit = async () => {
-        const res = await fetch(`${process.env.VITE_API_URL}/api/auth/signup`, {
+        const res = await fetch("https://arenax-gaming-app.onrender.com/api/auth/signup", {
             method: "POST",
             credentials: "include",
             headers: {
