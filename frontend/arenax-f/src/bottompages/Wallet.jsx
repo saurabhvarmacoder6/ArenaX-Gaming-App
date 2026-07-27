@@ -1,129 +1,154 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { RiSecurePaymentFill } from "react-icons/ri";
+import { MdSecurity } from "react-icons/md";
+import { FaCheckCircle } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 import {
     FaArrowLeft,
     FaWallet,
-    FaPlus,
-    FaBolt,
-} from "react-icons/fa";
+    FaLock,
+    FaIndianRupeeSign,
+} from "react-icons/fa6";
 
-function Wallet() {
+const Wallet = () => {
 
+    const transactions = [
+        {
+            id: 1,
+            type: "Deposit",
+            amount: 500,
+            status: "Success",
+            date: "25 Jul 2026",
+        },
+        {
+            id: 2,
+            type: "Withdraw",
+            amount: 300,
+            status: "Pending",
+            date: "24 Jul 2026",
+        },
+        {
+            id: 3,
+            type: "Deposit",
+            amount: 1000,
+            status: "Success",
+            date: "22 Jul 2026",
+        },
+    ];
     const navigate = useNavigate();
-    const [selectedAmount, setSelectedAmount] = useState("");
-    // ================================
-    // TODO: Fetch wallet balance
-    // ================================
 
     const walletBalance = 0;
 
-    // ================================
-    // TODO: Fetch quick amounts
-    // ================================
-
-    const quickAmounts = [50, 100, 200, 500, 1000, 2000];
-
     return (
+        <div className="min-h-screen bg-[#0F0F17] text-white">
 
-        <div className="min-h-screen bg-[#09090F] text-white pb-28">
+            {/* Header */}
 
-            {/* ================= Header ================= */}
+            <div className="sticky top-0 z-50 bg-[#0F0F17]/80 backdrop-blur-xl border-b border-white/10">
 
-            <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#09090F]/80 border-b border-white/10">
-
-                <div className="max-w-5xl mx-auto flex items-center justify-between px-5 py-4">
+                <div className="max-w-md mx-auto px-5 py-4 flex items-center gap-4">
 
                     <button
                         onClick={() => navigate(-1)}
-                        className="w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:bg-violet-600 duration-300 flex items-center justify-center"
+                        className="w-11 h-11 rounded-full bg-[#171722] border border-white/10 flex items-center justify-center active:scale-95"
                     >
                         <FaArrowLeft />
                     </button>
 
-                    <h2 className="text-xl font-bold">
-                        Wallet
-                    </h2>
+                    <div>
 
-                    <div className="w-11" />
+                        <h1 className="text-xl font-bold">
+                            Wallet
+                        </h1>
+
+                        <p className="text-xs text-gray-400">
+                            Manage your wallet securely
+                        </p>
+
+                    </div>
 
                 </div>
 
-            </header>
+            </div>
 
-            <div className="max-w-5xl mx-auto px-5">
+            <div className="max-w-md mx-auto px-5 py-6 space-y-6">
 
-                {/* ================= Wallet Card ================= */}
+                {/* Wallet Card */}
 
                 <motion.div
-                    initial={{ opacity: 0, y: 35 }}
+                    initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: .4 }}
-                    className="mt-8"
+                    transition={{ duration: .5 }}
+                    className="relative overflow-hidden rounded-3xl bg-linear-to-br from-violet-600 via-fuchsia-600 to-indigo-700 p-6 shadow-2xl shadow-violet-700/30"
                 >
 
-                    <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-violet-700 via-fuchsia-700 to-indigo-800 p-7 shadow-[0_0_45px_rgba(139,92,246,.30)]">
+                    <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-white/10 blur-3xl"></div>
 
-                        {/* Background Blur */}
+                    <div className="flex justify-between items-start">
 
-                        <div className="absolute -top-20 -right-16 w-48 h-48 rounded-full bg-white/10 blur-3xl"></div>
+                        <div>
 
-                        <div className="absolute -bottom-16 -left-16 w-40 h-40 rounded-full bg-pink-400/20 blur-3xl"></div>
+                            <div className="flex items-center gap-2 text-white/80">
 
-                        <div className="relative z-10">
+                                <FaWallet />
 
-                            <div className="flex items-center justify-between">
-
-                                <div>
-
-                                    <p className="text-white/70 text-sm tracking-widest uppercase">
-
-                                        Available Balance
-
-                                    </p>
-
-                                    <h1 className="text-5xl font-black mt-2">
-
-                                        ₹{walletBalance}
-
-                                    </h1>
-
-                                </div>
-
-                                <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-lg flex items-center justify-center border border-white/20">
-
-                                    <FaWallet className="text-3xl text-white" />
-
-                                </div>
+                                <span className="text-sm">
+                                    Wallet Balance
+                                </span>
 
                             </div>
 
-                            <div className="mt-10 flex items-center justify-between">
+                            <h2 className="text-4xl font-extrabold mt-4">
 
-                                <div>
+                                ₹ {walletBalance.toFixed(2)}
 
-                                    <p className="text-white/60 text-xs uppercase tracking-[3px]">
+                            </h2>
 
-                                        ArenaX Wallet
+                        </div>
 
-                                    </p>
+                        <div className="flex flex-col gap-2">
 
-                                    <h3 className="font-semibold mt-1">
+                            <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-200 text-xs font-medium flex items-center gap-2">
 
-                                        Secure Tournament Payments
+                                <FaCheckCircle size={12} />
 
-                                    </h3>
+                                Verified
 
-                                </div>
+                            </span>
 
-                                <div className="px-4 py-2 rounded-full bg-white/15 border border-white/20 text-sm font-semibold">
+                            <span className="px-3 py-1 rounded-full bg-white/15 text-white text-xs">
 
-                                    Active
+                                Active
 
-                                </div>
+                            </span>
 
-                            </div>
+                        </div>
+
+                    </div>
+
+                    <div className="mt-8 pt-5 border-t border-white/20 flex items-center gap-3">
+
+                        <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center">
+
+                            <FaLock />
+
+                        </div>
+
+                        <div>
+
+                            <h3 className="font-semibold">
+
+                                End-to-End Encrypted
+
+                            </h3>
+
+                            <p className="text-xs text-white/70">
+
+                                Your wallet is protected with secure encryption.
+
+                            </p>
 
                         </div>
 
@@ -131,254 +156,266 @@ function Wallet() {
 
                 </motion.div>
 
-                {/* ================= Quick Add ================= */}
+                {/* Add Money */}
 
                 <motion.div
-                    initial={{ opacity: 0, y: 35 }}
+                    initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: .15 }}
-                    className="mt-10"
+                    className="rounded-3xl bg-[#171722] border border-white/10 p-5"
                 >
 
-                    <div className="flex items-center justify-between mb-5">
+                    <h2 className="text-lg font-semibold">
+
+                        Add Money
+
+                    </h2>
+
+                    <p className="text-sm text-gray-400 mt-1">
+
+                        Enter the amount you want to add.
+
+                    </p>
+
+                    <div className="mt-6 relative">
+
+                        <FaIndianRupeeSign
+                            className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"
+                        />
+
+                        <input
+                            type="number"
+                            placeholder="Enter Amount"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-5 text-2xl font-semibold outline-none focus:border-violet-500 transition"
+                        />
+
+                    </div>
+
+                    <div className="flex justify-between mt-3 text-xs text-gray-400">
+
+                        <span>Min ₹10</span>
+
+                        <span>Max ₹10,000</span>
+
+                    </div>
+
+                    <button
+                        className="mt-6 w-full py-4 rounded-2xl bg-linear-to-r from-violet-600 via-fuchsia-600 to-indigo-600 font-semibold shadow-lg shadow-violet-600/30 active:scale-[0.98] transition"
+                    >
+
+                        Add Money
+
+                    </button>
+
+                </motion.div>
+
+                {/* Withdraw Card */}
+
+                <motion.div
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: .4 }}
+                    className="rounded-3xl bg-[#171722] border border-white/10 p-5"
+                >
+                    <div className="flex items-center gap-4 justify-between">
 
                         <div>
 
-                            <h2 className="text-2xl font-bold">
-
-                                Quick Add
-
+                            <h2 className="text-lg font-semibold">
+                                Withdraw Money
                             </h2>
 
-                            <p className="text-gray-400 text-sm mt-1">
-
-                                Select an amount to add instantly.
-
+                            <p className="text-sm text-gray-400 mt-1">
+                                Transfer your winnings directly to your bank account.
                             </p>
 
                         </div>
 
-                        <FaBolt className="text-yellow-400 text-xl" />
+                        <div className=" flex items-center justify-center">
+
+                            <FaMoneyBillTransfer
+                                className="text-violet-400 text-2xl"
+                            />
+
+                        </div>
 
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4">
+                    <button
+                        className="mt-6 w-full py-4 rounded-2xl border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/20 transition font-semibold"
+                    >
+                        Withdraw Now
+                    </button>
 
-                        {quickAmounts.map((amount) => (
+                </motion.div>
 
-                            <button
-                                key={amount}
-                                onClick={() => setSelectedAmount(amount)}
-                                className={`rounded-2xl border py-5 transition-all duration-300 group
-                                ${Number(selectedAmount) === amount
-                                        ? "bg-violet-600 border-violet-500"
-                                        : "bg-[#171722] border-white/10 hover:border-violet-500 hover:bg-violet-500/10"
-                                    }`}
+                {/* Security Card */}
+
+                <motion.div
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: .1 }}
+                    className="rounded-3xl bg-[#171722] border border-white/10 p-5"
+                >
+
+                    <div className="flex items-center gap-3">
+
+                        <div className="w-12 h-12 rounded-xl bg-green-500/15 flex items-center justify-center">
+
+                            <RiSecurePaymentFill
+                                className="text-green-400 text-2xl"
+                            />
+
+                        </div>
+
+                        <div>
+
+                            <h2 className="font-semibold">
+                                Secure Payments
+                            </h2>
+
+                            <p className="text-xs text-gray-400">
+                                Your wallet is fully protected.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div className="mt-6 space-y-4">
+
+                        {[
+                            "End-to-End Encryption",
+                            "Razorpay Secured Payment",
+                            "Instant Wallet Credit",
+                            "Fast Withdraw Processing",
+                        ].map((item) => (
+
+                            <div
+                                key={item}
+                                className="flex items-center gap-3"
                             >
 
-                                <FaPlus className="mx-auto text-violet-400 mb-3 group-hover:scale-110 transition-all" />
+                                <div className="w-8 h-8 rounded-full bg-green-500/15 flex items-center justify-center">
 
-                                <h3 className="text-xl font-bold">
+                                    <MdSecurity className="text-green-400" />
 
-                                    ₹{amount}
+                                </div>
 
-                                </h3>
+                                <span className="text-sm text-gray-300">
+                                    {item}
+                                </span>
 
-                            </button>
+                            </div>
 
                         ))}
 
                     </div>
 
                 </motion.div>
-
-                <div className="mt-5">
-
-                    <input
-                        type="number"
-                        placeholder="Or Enter Custom Amount"
-                        value={selectedAmount}
-                        onChange={(e) => setSelectedAmount(e.target.value)}
-                        className="w-full h-14 rounded-2xl bg-[#171722] border border-white/10 px-5 outline-none focus:border-violet-500 transition-all"
-                    />
-
-                </div>
-
-                {/* ================= Selected Amount ================= */}
+                {/* Payment History */}
 
                 <motion.div
-                    initial={{ opacity: 0, y: 35 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: .25 }}
-                    className="mt-10"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="rounded-3xl bg-[#171722] border border-white/10 p-5 mb-30"
                 >
 
-                    <div className="rounded-3xl bg-[#171722] border border-white/10 p-6">
+                    <div className="flex items-center justify-between">
 
-                        <h2 className="text-xl font-bold">
-                            Selected Amount
+                        <h2 className="text-lg font-semibold">
+                            Payment History
                         </h2>
 
-                        <p className="text-gray-400 text-sm mt-1">
-                            Choose any amount above and continue to payment.
-                        </p>
-
-                        <div className="mt-6 flex items-center justify-between">
-
-                            <div>
-
-                                <p className="text-gray-400 text-sm">
-                                    Amount
-                                </p>
-
-                                {/* TODO: Replace with selected amount */}
-                                <h1 className="text-4xl font-black mt-2">
-                                    ₹{selectedAmount || 0}
-                                </h1>
-
-                            </div>
-
-                            <div className="w-16 h-16 rounded-2xl bg-violet-500/15 border border-violet-500/30 flex items-center justify-center">
-
-                                <FaWallet className="text-3xl text-violet-400" />
-
-                            </div>
-
-                        </div>
+                        <span className="text-xs text-gray-400">
+                            {transactions.length} Transactions
+                        </span>
 
                     </div>
 
-                </motion.div>
+                    <div className="mt-5 space-y-4">
 
-                {/* ================= Proceed Button ================= */}
+                        {transactions ? transactions.map((item) => (
 
-                <motion.button
-                    initial={{ opacity: 0, y: 35 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: .35 }}
-                    disabled={!selectedAmount}
-                    className={`mt-8 w-full h-16 rounded-2xl font-bold text-lg transition-all duration-300
-                     ${selectedAmount
-                            ? "bg-linear-to-r from-violet-600 to-fuchsia-600 hover:scale-[1.02]"
-                            : "bg-gray-700 cursor-not-allowed"
-                        }`}
-                >
+                            <div
+                                key={item.id}
+                                className="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl p-4"
+                            >
 
-                    Proceed To Pay
+                                <div className="flex items-center gap-4">
 
-                </motion.button>
+                                    <div
+                                        className={`w-12 h-12 rounded-xl flex items-center justify-center ${item.type === "Deposit"
+                                            ? "bg-green-500/15"
+                                            : "bg-red-500/15"
+                                            }`}
+                                    >
 
-                {/* ================= Transactions ================= */}
+                                        {item.type === "Deposit" ? (
+                                            <FaArrowDown className="text-green-400" />
+                                        ) : (
+                                            <FaArrowUp className="text-red-400" />
+                                        )}
 
-                <motion.div
+                                    </div>
 
-                    initial={{ opacity: 0, y: 35 }}
+                                    <div>
 
-                    animate={{ opacity: 1, y: 0 }}
+                                        <h3 className="font-medium">
+                                            {item.type}
+                                        </h3>
 
-                    transition={{ delay: .45 }}
+                                        <p className="text-xs text-gray-400">
+                                            {item.date}
+                                        </p>
 
-                    className="mt-12"
+                                    </div>
 
-                >
+                                </div>
 
-                    <div className="flex items-center justify-between mb-5">
+                                <div className="text-right">
 
-                        <div>
+                                    <h3
+                                        className={`font-semibold ${item.type === "Deposit"
+                                            ? "text-green-400"
+                                            : "text-red-400"
+                                            }`}
+                                    >
+                                        {item.type === "Deposit" ? "+" : "-"}₹{item.amount}
+                                    </h3>
 
-                            <h2 className="text-2xl font-bold">
+                                    <span
+                                        className={`text-xs px-2 py-1 rounded-full ${item.status === "Success"
+                                            ? "bg-green-500/15 text-green-400"
+                                            : "bg-yellow-500/15 text-yellow-400"
+                                            }`}
+                                    >
+                                        {item.status}
+                                    </span>
 
-                                Recent Transactions
+                                </div>
 
-                            </h2>
+                            </div>
 
-                            <p className="text-gray-400 text-sm mt-1">
+                        )) : <div className="text-center py-10">
 
-                                Your latest wallet activity.
-
+                            <p className="text-gray-400">
+                                No payment history found.
                             </p>
 
-                        </div>
+                        </div>}
 
                     </div>
-
-                    {/* ========================================= */}
-
-                    {/* TODO:
-             Fetch Transactions From Backend
-
-             if(transactions.length===0)
-             show Empty State
-
-          */}
-
-                    {/* ================= Empty State ================= */}
-
-                    <div className="rounded-3xl border border-dashed border-white/10 bg-[#171722] p-12 text-center">
-
-                        <div className="w-20 h-20 rounded-full bg-violet-500/10 flex items-center justify-center mx-auto">
-
-                            <FaWallet className="text-4xl text-violet-400" />
-
-                        </div>
-
-                        <h2 className="text-2xl font-bold mt-6">
-
-                            No Transactions Yet
-
-                        </h2>
-
-                        <p className="text-gray-400 mt-3 max-w-sm mx-auto">
-
-                            Your wallet activity will appear here after adding money
-                            or joining tournaments.
-
-                        </p>
-
-                    </div>
-
-                    {/* ================= Transaction Card Example ================= */}
-
-                    {/*
-          <div className="space-y-4 mt-6">
-
-            <div className="rounded-2xl bg-[#171722] border border-white/10 p-5 flex justify-between items-center">
-
-              <div>
-
-                <h3 className="font-semibold text-green-400">
-
-                  + ₹200
-
-                </h3>
-
-                <p className="text-gray-400 text-sm">
-
-                  Money Added
-
-                </p>
-
-              </div>
-
-              <span className="text-xs text-gray-500">
-
-                Today
-
-              </span>
-
-            </div>
-
-          </div>
-          */}
 
                 </motion.div>
 
             </div>
 
         </div>
-
     );
-
-}
+};
 
 export default Wallet;
