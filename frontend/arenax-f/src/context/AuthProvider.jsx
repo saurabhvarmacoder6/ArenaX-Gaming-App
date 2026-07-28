@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
+import api from "../api/api";
 
 export const AuthProvider = ({ children }) => {
 
@@ -11,27 +12,22 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     const getCurrentUser = async () => {
-        try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-            })
+    try {
+        const { data } = await api.get("/api/auth/me");
 
-            const result = await res.json();
-            if (result.success) {
-                setUser(result.user)
-            } else {
-                setUser(null)
-            }
-        } catch (error) {
-            console.log(error);
-            setUser(null)
-        } finally {
-            setLoading(false)
+        if (data.success) {
+            setUser(data.user);
+        } else {
+            setUser(null);
         }
+
+    } catch (error) {
+        console.log(error);
+        setUser(null);
+    } finally {
+        setLoading(false);
     }
+};
 
     return (
         <AuthContext.Provider value={{ user, setUser, loading }}>

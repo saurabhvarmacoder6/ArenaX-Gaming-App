@@ -10,34 +10,31 @@ import {
 } from "react-icons/fa";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import api from "../api/api";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate()
-    const {setUser}=useContext(AuthContext)
+    const { setUser } = useContext(AuthContext)
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
 
     const handleSubmit = async () => {
+        try {
+            const { data } = await api.post("/api/auth/login", formData);
 
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-        let result = await res.json();
-        if (result.success) {
-            setUser(result.user)
-            navigate("/home")
-        } else {
-            alert("Enter Vaild Email Or Password")
+            if (data.success) {
+                setUser(data.user);
+                navigate("/home");
+            } else {
+                alert("Enter Valid Email Or Password");
+            }
+        } catch (err) {
+            alert(err.response?.data?.message || "Something went wrong");
         }
-    }
+    };
 
     return (
         <div className="min-h-screen bg-[#0B0B11] flex items-center justify-center px-5 py-10">

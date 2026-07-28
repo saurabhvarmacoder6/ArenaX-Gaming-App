@@ -13,6 +13,7 @@ import {
     FaEye,
     FaEyeSlash,
 } from "react-icons/fa";
+import api from "../api/api";
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -28,23 +29,21 @@ const Signup = () => {
     });
 
     const handleSubmit = async () => {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
-        let result = await res.json();
-        if (result.success) {
-            console.log(result.user);
-            setUser(result.user)
-            navigate("/home")
-        } else {
-            alert("Enter Vaild Data")
+        try {
+            const { data } = await api.post("/api/auth/signup", formData);
+
+            if (data.success) {
+                console.log(data.user);
+                setUser(data.user);
+                navigate("/home");
+            } else {
+                alert("Enter Valid Data");
+            }
+
+        } catch (err) {
+            alert(err.response?.data?.message || "Something went wrong");
         }
-    }
+    };
 
     return (
         <div className="min-h-screen bg-[#0B0B11] flex items-center justify-center px-5 py-10">
