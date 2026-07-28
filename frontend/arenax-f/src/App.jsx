@@ -25,7 +25,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/wallet" element={<Wallet />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
@@ -34,7 +33,7 @@ function App() {
           <Route path="/cs" element={<CSTournaments />} />
           <Route path="/lw" element={<LWTournaments />} />
           <Route path="/detail" element={<TournamentDetails />} />
-
+          <Route path="/wallet" element={<Wallet />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
 
