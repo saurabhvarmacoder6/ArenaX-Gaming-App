@@ -34,12 +34,6 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         unique: false
     },
-    walletBalance: {
-        type: Number,
-        required: true,
-        default: 0,
-        min: 0
-    },
     role: {
         type: String,
         required: true,

@@ -1,6 +1,8 @@
 import User from "../.././models/User.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import mongoose from "mongoose"
+import Wallet from "../../models/Wallet.js"
 
 export const signUp = async (req, res) => {
     const { name, email, gameName, uid, password } = req.body;
@@ -10,20 +12,37 @@ export const signUp = async (req, res) => {
             success: false
         })
     }
+
+    let session;
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const result = await User.create({
+        session = await mongoose.startSession();
+        session.startTransaction();
+        const user = new User({
             name,
             email,
             gameName,
             uid,
             password: hashedPassword
         });
+        console.log("User Saved");
+        await user.save({ session });
 
-        const userWithoutPassword = await User.findById(result._id).select("-password");
+        const wallet = new Wallet({
+            userId: user._id,
+            balance: 0
+        })
+        console.log("wallet saving");
+        await wallet.save({ session });
+        console.log("wallet saved");
+        await session.commitTransaction();
+        console.log("wallet saving");
+        const userObject = user.toObject();
+        delete userObject.password;
 
         jwt.sign(
-            { userId: result._id, role: result.role }
+            { userId: user._id, role: user.role }
             , process.env.JWT_SECRET, { expiresIn: '6d' }, (error, token) => {
                 if (error) {
                     return res.status(500).json({
@@ -40,16 +59,23 @@ export const signUp = async (req, res) => {
                 return res.status(201).json({
                     success: true,
                     msg: "Signup successful",
-                    user:userWithoutPassword
+                    user: userObject
                 });
 
             })
     } catch (error) {
         console.error(error)
+        if (session) {
+            await session.abortTransaction();
+        }
         return res.status(500).json({
             success: false,
             msg: "Internal Server Error"
         })
+    } finally {
+        if (session) {
+            await session.endSession();
+        }
     }
 }
 
