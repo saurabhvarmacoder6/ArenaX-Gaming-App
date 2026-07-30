@@ -21,7 +21,7 @@ const Wallet = () => {
 
     const handlePayment = async () => {
         try {
-            const { data } = await api.post("/payment/create-order", {
+            const { data } = await api.post("/api/payment/create-order", {
                 amount,
             });
 
