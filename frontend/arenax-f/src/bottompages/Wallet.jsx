@@ -34,8 +34,8 @@ const Wallet = () => {
                 name: "ArenaX",
                 description: "Wallet Recharge",
 
-                handler: function (response) {
-                    console.log(response);
+                handler:async function (response) {
+                    await api.post("/api/payment/verify", response);
                 },
             };
 
