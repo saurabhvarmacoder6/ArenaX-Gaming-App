@@ -5,7 +5,7 @@ import Wallet from "../../models/Wallet.js";
 import Transaction from "../../models/transaction.js";
 
 export const createOrder = async (req, res) => {
-
+    console.log(req.user);
     const { amount } = req.body;
     if (typeof amount !== "number" || !Number.isInteger(amount) || amount < 10) {
         return res.status(400).json({
@@ -20,8 +20,10 @@ export const createOrder = async (req, res) => {
             currency: "INR",
         });
 
+
+
         await PaymentOrder.create({
-            userId: req.user.id,
+            userId: req.user.userId,
             orderId: order.id,
             amount,
             currency: order.currency,
