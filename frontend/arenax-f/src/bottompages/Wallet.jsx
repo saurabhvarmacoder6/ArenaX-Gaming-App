@@ -5,6 +5,8 @@ import { RiSecurePaymentFill } from "react-icons/ri";
 import { MdSecurity } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
+import api from "../api/api";
+
 import {
     FaArrowLeft,
     FaWallet,
@@ -15,15 +17,20 @@ import { useState } from "react";
 
 const Wallet = () => {
 
-    const [amount , setAmount] = useState(0)
+    const [amount, setAmount] = useState(0);
 
     const handlePayment = async () => {
-    // Backend se order create
+        try {
+            const { data } = await api.post("/payment/create-order", {
+                amount,
+            });
 
-    // Razorpay options
+            console.log(data);
 
-    // Open Checkout
-};
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const transactions = [
         {
@@ -197,7 +204,7 @@ const Wallet = () => {
                         <input
                             type="number"
                             placeholder="Enter Amount"
-                            onChange={(e)=>setAmount(e.target.value)}
+                            onChange={(e) => setAmount(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-5 text-2xl font-semibold outline-none focus:border-violet-500 transition"
                         />
 
@@ -212,7 +219,7 @@ const Wallet = () => {
                     </div>
 
                     <button
-                    onClick={handlePayment}
+                        onClick={handlePayment}
                         className="mt-6 w-full py-4 rounded-2xl bg-linear-to-r from-violet-600 via-fuchsia-600 to-indigo-600 font-semibold shadow-lg shadow-violet-600/30 active:scale-[0.98] transition"
                     >
 
