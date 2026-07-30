@@ -5,6 +5,7 @@ import Wallet from "../../models/Wallet.js";
 import Transaction from "../../models/transaction.js";
 
 export const createOrder = async (req, res) => {
+
     const { amount } = req.body;
     if (typeof amount !== "number" || !Number.isInteger(amount) || amount < 10) {
         return res.status(400).json({
@@ -19,19 +20,20 @@ export const createOrder = async (req, res) => {
             currency: "INR",
         });
 
-        await PaymentOrder.create({
-            userId: req.user.id,
-            orderId: order.id,
-            amount,
-            currency: order.currency,
-            status: "created",
-        });
+        // await PaymentOrder.create({
+        //     userId: req.user.id,
+        //     orderId: order.id,
+        //     amount,
+        //     currency: order.currency,
+        //     status: "created",
+        // });
 
         return res.status(200).json({
             success: true,
             order,
         });
     } catch (error) {
+        console.error(error)
         return res.status(500).json({
             success: false,
             msg: "Failed to create order",
