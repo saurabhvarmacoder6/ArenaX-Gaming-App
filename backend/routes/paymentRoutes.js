@@ -4,7 +4,7 @@ import { createOrder, verifyPayment } from "../controllers/payment/createOrderCo
 
 const router = express.Router();
 
-router.post("/create-order", createOrder);
+router.post("/create-order", verifyToken , createOrder);
 router.post("/verify", verifyToken, verifyPayment);
 
 export default router;
