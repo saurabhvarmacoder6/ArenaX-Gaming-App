@@ -3,12 +3,12 @@ import razorpay from "../../config/razorpay.js";
 
 export const createOrder = async (req, res) => {
     const { amount } = req.body;
-    if (!Number.isInteger(amount) || amount < 10) {
-        return res.status(400).json({
-            success: false,
-            msg: "Minimum amount is ₹10",
-        });
-    }
+    if (typeof amount !== "number" || !Number.isInteger(amount) || amount < 10) {
+    return res.status(400).json({
+        success: false,
+        msg: "Minimum amount is ₹10",
+    });
+}
 
     try {
         const order = await razorpay.orders.create({

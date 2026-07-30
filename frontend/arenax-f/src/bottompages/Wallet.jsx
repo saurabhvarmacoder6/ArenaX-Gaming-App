@@ -25,8 +25,25 @@ const Wallet = () => {
                 amount,
             });
 
-            console.log(data);
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+                amount: data.order.amount,
+                currency: data.order.currency,
+                order_id: data.order.id,
 
+                name: "ArenaX",
+                description: "Wallet Recharge",
+
+                handler: function (response) {
+                    console.log(response);
+                },
+            };
+
+
+
+            const razorpay = new window.Razorpay(options);
+
+            razorpay.open();
         } catch (error) {
             console.log(error);
         }
@@ -204,7 +221,7 @@ const Wallet = () => {
                         <input
                             type="number"
                             placeholder="Enter Amount"
-                            onChange={(e) => setAmount(e.target.value)}
+                            onChange={(e) => setAmount(Number(e.target.value))}
                             className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-5 text-2xl font-semibold outline-none focus:border-violet-500 transition"
                         />
 
