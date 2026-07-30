@@ -121,10 +121,19 @@ export const verifyPayment = async (req, res) => {
 
         // update paymentorder
 
-        paymentOrder.status = "paid";
-        paymentOrder.paymentId = razorpay_payment_id;
+        // paymentOrder.status = "paid";
+        // paymentOrder.paymentId = razorpay_payment_id;
 
-        await paymentOrder.save({ session });
+        await PaymentOrder.updateOne(
+            { orderId: razorpay_order_id },
+            {
+                $set: {
+                    paymentId: razorpay_payment_id,
+                    status: "paid",
+                },
+            },
+            { session }
+        );
 
         // create transaction
 
