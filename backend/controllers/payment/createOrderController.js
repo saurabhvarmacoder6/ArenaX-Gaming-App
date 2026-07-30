@@ -42,128 +42,128 @@ export const createOrder = async (req, res) => {
 }
 
 
-export const verifyPayment = async (req, res) => {
-    const {
-        razorpay_payment_id,
-        razorpay_order_id,
-        razorpay_signature,
-    } = req.body;
+// export const verifyPayment = async (req, res) => {
+//     const {
+//         razorpay_payment_id,
+//         razorpay_order_id,
+//         razorpay_signature,
+//     } = req.body;
 
-    // create hmac
+//     // create hmac
 
-    const hmac = crypto.createHmac(
-        "sha256",
-        process.env.RAZORPAY_KEY_SECRET
-    );
+//     const hmac = crypto.createHmac(
+//         "sha256",
+//         process.env.RAZORPAY_KEY_SECRET
+//     );
 
-    hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+//     hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
 
-    // generated signature
+//     // generated signature
 
-    const generatedSignature = hmac.digest("hex");
+//     const generatedSignature = hmac.digest("hex");
 
-    if (generatedSignature !== razorpay_signature) {
-        return res.status(400).json({
-            success: false,
-            message: "Invalid payment signature",
-        });
-    }
-    let session = null;
-    try {
-        const paymentOrder = await PaymentOrder.findOne({
-            orderId: razorpay_order_id,
-        });
+//     if (generatedSignature !== razorpay_signature) {
+//         return res.status(400).json({
+//             success: false,
+//             message: "Invalid payment signature",
+//         });
+//     }
+//     let session = null;
+//     try {
+//         const paymentOrder = await PaymentOrder.findOne({
+//             orderId: razorpay_order_id,
+//         });
 
-        if (!paymentOrder) {
-            return res.status(404).json({
-                success: false,
-                message: "Payment order not found",
-            });
-        }
+//         if (!paymentOrder) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Payment order not found",
+//             });
+//         }
 
-        if (paymentOrder.status === "paid") {
-            return res.status(409).json({
-                success: false,
-                message: "Payment already verified",
-            });
-        }
+//         if (paymentOrder.status === "paid") {
+//             return res.status(409).json({
+//                 success: false,
+//                 message: "Payment already verified",
+//             });
+//         }
 
-        // start session
+//         // start session
 
-        session = await mongoose.startSession();
+//         session = await mongoose.startSession();
 
-        session.startTransaction();
+//         session.startTransaction();
 
-        // find object in wallet
+//         // find object in wallet
 
-        const wallet = await Wallet.findOne(
-            {
-                userId: paymentOrder.userId,
-            },
-            null,
-            { session }
-        );
+//         const wallet = await Wallet.findOne(
+//             {
+//                 userId: paymentOrder.userId,
+//             },
+//             null,
+//             { session }
+//         );
 
-        if (!wallet) {
-            return res.status(404).json({
-                success: false,
-                message: "Wallet not found",
-            });
-        }
+//         if (!wallet) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Wallet not found",
+//             });
+//         }
 
-        // update wallet balance
+//         // update wallet balance
 
-        wallet.balance += paymentOrder.amount;
+//         wallet.balance += paymentOrder.amount;
 
-        await wallet.save({ session });
+//         await wallet.save({ session });
 
-        // update paymentorder
+//         // update paymentorder
 
-        paymentOrder.status = "paid";
-        paymentOrder.paymentId = razorpay_payment_id;
+//         paymentOrder.status = "paid";
+//         paymentOrder.paymentId = razorpay_payment_id;
 
-        await paymentOrder.save({ session });
+//         await paymentOrder.save({ session });
 
-        // create transaction
+//         // create transaction
 
-        await Transaction.create(
-            [
-                {
-                    userId: paymentOrder.userId,
-                    type: "credit",
-                    amount: paymentOrder.amount,
-                    reason: "Wallet Recharge",
-                    paymentId: razorpay_payment_id,
-                    orderId: razorpay_order_id,
-                    status: "success",
-                },
-            ],
-            { session }
-        );
+//         await Transaction.create(
+//             [
+//                 {
+//                     userId: paymentOrder.userId,
+//                     type: "credit",
+//                     amount: paymentOrder.amount,
+//                     reason: "Wallet Recharge",
+//                     paymentId: razorpay_payment_id,
+//                     orderId: razorpay_order_id,
+//                     status: "success",
+//                 },
+//             ],
+//             { session }
+//         );
 
-        await session.commitTransaction();
+//         await session.commitTransaction();
 
-        return res.status(200).json({
-            success: true,
-            message: "Payment verified successfully",
-            paymentId: razorpay_payment_id,
-        });
-    } catch (error) {
-        console.error(error);
+//         return res.status(200).json({
+//             success: true,
+//             message: "Payment verified successfully",
+//             paymentId: razorpay_payment_id,
+//         });
+//     } catch (error) {
+//         console.error(error);
 
-        if (session?.inTransaction()) {
-            await session.abortTransaction();
-        }
+//         if (session?.inTransaction()) {
+//             await session.abortTransaction();
+//         }
 
-        return res.status(500).json({
-            success: false,
-            message: "Payment verification failed",
-        });
-    } finally {
+//         return res.status(500).json({
+//             success: false,
+//             message: "Payment verification failed",
+//         });
+//     } finally {
 
-        if (session) {
-            session.endSession();
-        }
+//         if (session) {
+//             session.endSession();
+//         }
 
-    }
-}
+//     }
+// }
