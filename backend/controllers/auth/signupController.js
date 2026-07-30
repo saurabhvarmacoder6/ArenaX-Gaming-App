@@ -26,18 +26,15 @@ export const signUp = async (req, res) => {
             uid,
             password: hashedPassword
         });
-        console.log("User Saved");
         await user.save({ session });
 
         const wallet = new Wallet({
             userId: user._id,
             balance: 0
         })
-        console.log("wallet saving");
         await wallet.save({ session });
         console.log("wallet saved");
         await session.commitTransaction();
-        console.log("wallet saving");
         const userObject = user.toObject();
         delete userObject.password;
 

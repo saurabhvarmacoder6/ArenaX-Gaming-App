@@ -11,8 +11,19 @@ import {
     FaLock,
     FaIndianRupeeSign,
 } from "react-icons/fa6";
+import { useState } from "react";
 
 const Wallet = () => {
+
+    const [amount , setAmount] = useState(0)
+
+    const handlePayment = async () => {
+    // Backend se order create
+
+    // Razorpay options
+
+    // Open Checkout
+};
 
     const transactions = [
         {
@@ -186,6 +197,7 @@ const Wallet = () => {
                         <input
                             type="number"
                             placeholder="Enter Amount"
+                            onChange={(e)=>setAmount(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-5 text-2xl font-semibold outline-none focus:border-violet-500 transition"
                         />
 
@@ -200,6 +212,7 @@ const Wallet = () => {
                     </div>
 
                     <button
+                    onClick={handlePayment}
                         className="mt-6 w-full py-4 rounded-2xl bg-linear-to-r from-violet-600 via-fuchsia-600 to-indigo-600 font-semibold shadow-lg shadow-violet-600/30 active:scale-[0.98] transition"
                     >
 
