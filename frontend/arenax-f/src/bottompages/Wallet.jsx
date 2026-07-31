@@ -5,6 +5,7 @@ import { RiSecurePaymentFill } from "react-icons/ri";
 import { MdSecurity } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
+
 import api from "../api/api";
 
 import {
@@ -13,11 +14,18 @@ import {
     FaLock,
     FaIndianRupeeSign,
 } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Wallet = () => {
 
     const [amount, setAmount] = useState(0);
+    const [balance, setBalance] = useState()
+
+
+    useEffect(() => {
+        getBalance()
+    }, [])
 
     const handlePayment = async () => {
         try {
@@ -34,10 +42,11 @@ const Wallet = () => {
                 name: "ArenaX",
                 description: "Wallet Recharge",
 
-                handler:async function (response) {
+                handler: async function (response) {
                     await api.post("/api/payment/verify", response);
                 },
             };
+
 
 
 
@@ -48,6 +57,17 @@ const Wallet = () => {
             console.log(error);
         }
     };
+
+    async function getBalance() {
+        try {
+            const { data } = await api.get("/api/auth/balance")
+            const objData = data.data
+            setBalance(objData.balance)
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
 
     const transactions = [
         {
@@ -74,7 +94,6 @@ const Wallet = () => {
     ];
     const navigate = useNavigate();
 
-    const walletBalance = 0;
 
     return (
         <div className="min-h-screen bg-[#0F0F17] text-white">
@@ -115,75 +134,75 @@ const Wallet = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: .5 }}
+                    transition={{ duration: 0.5 }}
                     className="relative overflow-hidden rounded-3xl bg-linear-to-br from-violet-600 via-fuchsia-600 to-indigo-700 p-6 shadow-2xl shadow-violet-700/30"
                 >
+                    <div className="absolute -top-12 -right-12 h-40 w-40 rounded-full bg-white/10 blur-3xl"></div>
 
-                    <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-white/10 blur-3xl"></div>
+                    <div className="relative z-10 flex flex-col gap-3">
 
-                    <div className="flex justify-between items-start">
+                        {/* Header */}
+                        <div className="flex flex-wrap items-start justify-between gap-4">
 
-                        <div>
+                            <div className="min-w-0 flex-1">
 
-                            <div className="flex items-center gap-2 text-white/80">
+                                <div className="flex items-center gap-2 text-white/80">
+                                    <FaWallet />
+                                    <span className="text-sm font-medium">
+                                        Wallet Balance
+                                    </span>
+                                </div>
 
-                                <FaWallet />
+                            </div>
 
-                                <span className="text-sm">
-                                    Wallet Balance
+                            <div>
+
+                                <span className="flex items-center gap-2 rounded-full bg-green-500/20 px-3 py-1 text-xs font-medium text-green-200">
+
+                                    <FaCheckCircle size={12} />
+
+                                    Verified
+
                                 </span>
 
                             </div>
 
-                            <h2 className="text-4xl font-extrabold mt-4">
+                        </div>
 
-                                ₹ {walletBalance.toFixed(2)}
-
+                        <div className="flex items-center py-3">
+                            <h2
+                                className="font-black leading-none
+                                    text-3xl sm:text-4xl
+                                    break-all"
+                            >
+                                ₹ {Number(balance).toLocaleString("en-IN")}.00
                             </h2>
-
                         </div>
 
-                        <div className="flex flex-col gap-2">
+                        {/* Bottom Card */}
+                        <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
 
-                            <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-200 text-xs font-medium flex items-center gap-2">
+                            <div className="flex items-center gap-3">
 
-                                <FaCheckCircle size={12} />
+                                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15">
 
-                                Verified
+                                    <FaLock />
 
-                            </span>
+                                </div>
 
-                            <span className="px-3 py-1 rounded-full bg-white/15 text-white text-xs">
+                                <div className="min-w-0">
 
-                                Active
+                                    <h3 className="font-semibold">
+                                        End-to-End Encrypted
+                                    </h3>
 
-                            </span>
+                                    <p className="mt-1 text-xs text-white/70">
+                                        Your wallet is protected with secure encryption.
+                                    </p>
 
-                        </div>
+                                </div>
 
-                    </div>
-
-                    <div className="mt-8 pt-5 border-t border-white/20 flex items-center gap-3">
-
-                        <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center">
-
-                            <FaLock />
-
-                        </div>
-
-                        <div>
-
-                            <h3 className="font-semibold">
-
-                                End-to-End Encrypted
-
-                            </h3>
-
-                            <p className="text-xs text-white/70">
-
-                                Your wallet is protected with secure encryption.
-
-                            </p>
+                            </div>
 
                         </div>
 

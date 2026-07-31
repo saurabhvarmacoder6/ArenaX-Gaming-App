@@ -3,9 +3,9 @@ import crypto from "crypto";
 import PaymentOrder from "../../models/paymentOrder.js";
 import Wallet from "../../models/Wallet.js";
 import Transaction from "../../models/transaction.js";
+import mongoose from "mongoose";
 
 export const createOrder = async (req, res) => {
-    console.log(req.user);
     const { amount } = req.body;
     if (typeof amount !== "number" || !Number.isInteger(amount) || amount < 10) {
         return res.status(400).json({
@@ -121,19 +121,10 @@ export const verifyPayment = async (req, res) => {
 
         // update paymentorder
 
-        // paymentOrder.status = "paid";
-        // paymentOrder.paymentId = razorpay_payment_id;
+        paymentOrder.status = "paid";
+        paymentOrder.paymentId = razorpay_payment_id;
 
-        await PaymentOrder.updateOne(
-            { orderId: razorpay_order_id },
-            {
-                $set: {
-                    paymentId: razorpay_payment_id,
-                    status: "paid",
-                },
-            },
-            { session }
-        );
+        await paymentOrder.save({ session });
 
         // create transaction
 
