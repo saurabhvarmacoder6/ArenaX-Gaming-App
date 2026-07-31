@@ -15,16 +15,16 @@ import {
     FaIndianRupeeSign,
 } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 const Wallet = () => {
 
     const [amount, setAmount] = useState(0);
     const [balance, setBalance] = useState()
-
+    const [transactions ,setTransactions] = useState([])
 
     useEffect(() => {
         getBalance()
+        handleTransactions()
     }, [])
 
     const handlePayment = async () => {
@@ -68,30 +68,16 @@ const Wallet = () => {
         }
 
     }
+      
 
-    const transactions = [
-        {
-            id: 1,
-            type: "Deposit",
-            amount: 500,
-            status: "Success",
-            date: "25 Jul 2026",
-        },
-        {
-            id: 2,
-            type: "Withdraw",
-            amount: 300,
-            status: "Pending",
-            date: "24 Jul 2026",
-        },
-        {
-            id: 3,
-            type: "Deposit",
-            amount: 1000,
-            status: "Success",
-            date: "22 Jul 2026",
-        },
-    ];
+    async function handleTransactions() {
+        try {
+            const { data } = await api.get("/api/auth/transaction")
+            setTransactions(data.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
     const navigate = useNavigate();
 
 
@@ -210,6 +196,13 @@ const Wallet = () => {
 
                 </motion.div>
 
+                <button
+                    onClick={() => navigate("/order-data")}
+                    className="mt-6 w-full py-4 rounded-2xl border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/20 transition font-semibold"
+                >
+                    Check Payment Order
+                </button>
+
                 {/* Add Money */}
 
                 <motion.div
@@ -241,12 +234,12 @@ const Wallet = () => {
                             type="number"
                             placeholder="Enter Amount"
                             onChange={(e) => setAmount(Number(e.target.value))}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-5 text-2xl font-semibold outline-none focus:border-violet-500 transition"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-3 py-3 text-xl font-semibold outline-none focus:border-violet-500 transition"
                         />
 
                     </div>
 
-                    <div className="flex justify-between mt-3 text-xs text-gray-400">
+                    <div className="flex justify-between mt-3 text-xs font-semibold text-gray-400">
 
                         <span>Min ₹10</span>
 
@@ -299,6 +292,7 @@ const Wallet = () => {
                     </div>
 
                     <button
+                    onClick={()=>navigate("/withdraw")}
                         className="mt-6 w-full py-4 rounded-2xl border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/20 transition font-semibold"
                     >
                         Withdraw Now
@@ -392,77 +386,135 @@ const Wallet = () => {
 
                     </div>
 
-                    <div className="mt-5 space-y-4">
+                    <div className="mt-5 space-y-5">
 
-                        {transactions ? transactions.map((item) => (
+                        {transactions?.length > 0 ? (
 
-                            <div
-                                key={item.id}
-                                className="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl p-4"
-                            >
+                            transactions.map((item) => (
 
-                                <div className="flex items-center gap-4">
+                                <motion.div
+                                    key={item._id}
+                                    whileHover={{ y: -3 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="rounded-3xl border border-white/10 bg-[#1e293b] p-5"
+                                >
 
-                                    <div
-                                        className={`w-12 h-12 rounded-xl flex items-center justify-center ${item.type === "Deposit"
-                                            ? "bg-green-500/15"
-                                            : "bg-red-500/15"
-                                            }`}
-                                    >
+                                    <div className="flex justify-between items-start">
 
-                                        {item.type === "Deposit" ? (
-                                            <FaArrowDown className="text-green-400" />
-                                        ) : (
-                                            <FaArrowUp className="text-red-400" />
-                                        )}
+                                        <div className="flex gap-4">
+
+                                            <div
+                                                className={`size-10 rounded-full flex items-center justify-center ${item.type === "credit"
+                                                        ? "bg-green-500/15"
+                                                        : "bg-red-500/15"
+                                                    }`}
+                                            >
+                                                {item.type === "credit" ? (
+                                                    <FaArrowDown className="text-green-400 text-md" />
+                                                ) : (
+                                                    <FaArrowUp className="text-red-400 text-md" />
+                                                )}
+                                            </div>
+
+                                            <div>
+
+                                                <h2 className="font-semibold text-lg capitalize">
+                                                    {item.type}
+                                                </h2>
+
+                                                
+
+                                            </div>
+
+                                        </div>
+
+                                        <div className="text-right">
+
+                                            <h2
+                                                className={`text-lg font-bold ${item.type === "credit"
+                                                        ? "text-green-400"
+                                                        : "text-red-400"
+                                                    }`}
+                                            >
+                                                {item.type === "credit" ? "+" : "-"}₹{item.amount}
+                                            </h2>
+
+                                            <span
+                                                className={`inline-block mt-2 px-3 py-1 rounded-full text-xs ${item.status === "success"
+                                                        ? "bg-green-500/20 text-green-400"
+                                                        : item.status === "pending"
+                                                            ? "bg-yellow-500/20 text-yellow-400"
+                                                            : "bg-red-500/20 text-red-400"
+                                                    }`}
+                                            >
+                                                {item.status}
+                                            </span>
+
+                                        </div>
 
                                     </div>
 
-                                    <div>
+                                    <div className="border-t border-white/10 mt-5 pt-4 space-y-3">
 
-                                        <h3 className="font-medium">
-                                            {item.type}
-                                        </h3>
+                                        <div className="flex justify-between text-sm">
 
-                                        <p className="text-xs text-gray-400">
-                                            {item.date}
-                                        </p>
+                                            <span className="text-slate-400">
+                                                Payment ID
+                                            </span>
+
+                                            <span className="font-medium break-all text-right">
+                                                {item.paymentId || "N/A"}
+                                            </span>
+
+                                        </div>
+
+                                        <div className="flex justify-between text-sm">
+
+                                            <span className="text-slate-400">
+                                                Date
+                                            </span>
+
+                                            <span>
+                                                {new Date(item.createdAt).toLocaleString()}
+                                            </span>
+
+                                        </div>
+
+                                        <div className="flex justify-between text-sm">
+
+                                            <span className="text-slate-400">
+                                                Amount
+                                            </span>
+
+                                            <span className="font-semibold">
+                                                ₹{item.amount}
+                                            </span>
+
+                                        </div>
 
                                     </div>
 
-                                </div>
+                                </motion.div>
 
-                                <div className="text-right">
+                            ))
 
-                                    <h3
-                                        className={`font-semibold ${item.type === "Deposit"
-                                            ? "text-green-400"
-                                            : "text-red-400"
-                                            }`}
-                                    >
-                                        {item.type === "Deposit" ? "+" : "-"}₹{item.amount}
-                                    </h3>
+                        ) : (
 
-                                    <span
-                                        className={`text-xs px-2 py-1 rounded-full ${item.status === "Success"
-                                            ? "bg-green-500/15 text-green-400"
-                                            : "bg-yellow-500/15 text-yellow-400"
-                                            }`}
-                                    >
-                                        {item.status}
-                                    </span>
+                            <div className="rounded-3xl border border-white/10 bg-[#1e293b] p-10 text-center">
 
-                                </div>
+                                <FaWallet className="mx-auto text-5xl text-slate-500" />
+
+                                <h2 className="mt-5 text-xl font-semibold">
+                                    No Transactions Found
+                                </h2>
+
+                                <p className="text-slate-400 mt-2">
+                                    Your wallet transaction history will appear here.
+                                </p>
 
                             </div>
 
-                        )) : <div className="text-center py-10">
-
-                            <p className="text-gray-400">
-                                No payment history found.
-                            </p>
-
-                        </div>}
+                        )}
 
                     </div>
 

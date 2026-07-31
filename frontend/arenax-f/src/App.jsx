@@ -13,6 +13,8 @@ import ForgotPassword from './components/ForgotPassword'
 import ProtectedRoute from './context/ProtectedRoute'
 import PublicRoute from './context/PublicRoute'
 import Profile from './components/Profile'
+import PaymentOrderData from './components/PaymentOrderData'
+import Withdraw from './components/withdraw'
 function App() {
 
   const location = useLocation();
@@ -35,6 +37,8 @@ function App() {
           <Route path="/detail" element={<TournamentDetails />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/order-data" element={<PaymentOrderData />} />
+          <Route path="/withdraw" element={<Withdraw />} />
         </Route>
 
       </Routes>
