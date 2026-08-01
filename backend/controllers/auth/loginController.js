@@ -29,7 +29,7 @@ export const Login = async (req, res) => {
         }
 
         jwt.sign(
-            { userId: user._id, role: user.role }
+            { userId: user._id, role: user.role, userName: user.name }
             , process.env.JWT_SECRET, { expiresIn: '6d' }, (error, token) => {
                 if (error) {
                     return res.status(500).json({

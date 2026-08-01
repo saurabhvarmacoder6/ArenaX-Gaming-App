@@ -12,13 +12,21 @@ import Login from './components/Login'
 import ForgotPassword from './components/ForgotPassword'
 import ProtectedRoute from './context/ProtectedRoute'
 import PublicRoute from './context/PublicRoute'
-import Profile from './components/Profile'
+import Profile from './bottompages/Profile'
 import PaymentOrderData from './components/PaymentOrderData'
 import Withdraw from './components/withdraw'
+import AdminRoutes from './context/AdminRoutes'
+import AdminLayout from './admin/AdminLayout'
+import Dashboard from './admin/Dashboard'
+import WithdrawRequest from './admin/WithdrawRequest'
+import PaymentOrder from './admin/PaymentOrder'
+import Users from './admin/Users'
+import Tournaments from './admin/Tournaments'
+import CreateTournaments from './admin/CreateTournaments'
 function App() {
 
   const location = useLocation();
-  const hideBottomNav = ["/", "/signup", "/login", "/forgot-password"].includes(location.pathname);
+  const hideBottomNav = ["/", "/signup", "/login", "/forgot-password", "/admin" ,"/admin/withdraw", "/admin/payment-orders", "/admin/users", "/admin/tournaments", "/admin/create-tournaments"].includes(location.pathname);
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#09090B]">
       <Routes>
@@ -39,6 +47,17 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/order-data" element={<PaymentOrderData />} />
           <Route path="/withdraw" element={<Withdraw />} />
+        </Route>
+
+        <Route element={<AdminRoutes />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="withdraw" element={<WithdrawRequest />} />
+            <Route path="payment-orders" element={<PaymentOrder />} />
+            <Route path="users" element={<Users />} />
+            <Route path="tournaments" element={<Tournaments />} />
+            <Route path="create-tournaments" element={<CreateTournaments />} />
+          </Route>
         </Route>
 
       </Routes>

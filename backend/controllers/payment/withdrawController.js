@@ -2,7 +2,8 @@ import Withdrawal from "../../models/withdraw.js";
 import Wallet from "../../models/Wallet.js";
 
 export const postWithdrawData = async (req, res) => {
-    try {
+    console.log(req.user);
+        try {
         const { amount, upiId, adminNote } = req.body;
 
         // Validation
@@ -55,6 +56,7 @@ export const postWithdrawData = async (req, res) => {
 
         const result = await Withdrawal.create({
             userId: req.user.userId,
+            userName: req.user.userName,
             amount,
             upiId,
             adminNote,
