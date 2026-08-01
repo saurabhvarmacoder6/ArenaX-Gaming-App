@@ -41,7 +41,7 @@ export default function Profile() {
         <div className="w-full">
             <Homehead />
             <div className="min-h-screen bg-[#09090B] text-white px-4 py-6">
-                <div className="mx-auto p-4">
+                <div className="mx-auto p-4 pb-40">
 
                     {/* Profile Card */}
                     <motion.div
@@ -129,7 +129,7 @@ export default function Profile() {
                     {user.role === "admin" && (
                         <button
                             onClick={() => navigate("/admin")}
-                            className="mt-4 mb-30 flex w-full items-center justify-center gap-3 rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-600 py-4 font-semibold shadow-[0_10px_30px_rgba(139,92,246,.35)]"
+                            className="mt-4 flex w-full items-center justify-center gap-3 rounded-2xl bg-linear-to-r from-violet-500 to-fuchsia-600 py-4 font-semibold shadow-[0_10px_30px_rgba(139,92,246,.35)]"
                         >
                             Admin Panel
                         </button>
