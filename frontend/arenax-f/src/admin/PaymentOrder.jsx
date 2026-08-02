@@ -9,42 +9,27 @@ import {
     FaUserCircle,
     FaEye,
 } from "react-icons/fa";
-
-const dummyOrders = [
-    {
-        _id: "1",
-        userName: "Saurabh Kumar",
-        amount: 500,
-        orderId: "order_RZP123456",
-        paymentId: "pay_QWERTY123",
-        status: "paid",
-        createdAt: "01 Aug 2026",
-    },
-    {
-        _id: "2",
-        userName: "Rahul Sharma",
-        amount: 250,
-        orderId: "order_RZP987654",
-        paymentId: null,
-        status: "created",
-        createdAt: "31 Jul 2026",
-    },
-    {
-        _id: "3",
-        userName: "Aman",
-        amount: 100,
-        orderId: "order_RZP111222",
-        paymentId: null,
-        status: "failed",
-        createdAt: "30 Jul 2026",
-    },
-];
+import api from "../api/api";
 
 export default function PaymentOrders() {
 
-    const [orders] = useState(dummyOrders);
+    const [orders, setOrders] = useState([]);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("all");
+
+
+    useMemo(() => {
+        handlePaymentOrder();
+    }, []);
+
+    async function handlePaymentOrder() {
+        try {
+            const { data } = await api.get("/api/auth/order-data");
+            setOrders(data.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const filteredOrders = useMemo(() => {
 

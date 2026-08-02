@@ -24,6 +24,7 @@ export const createOrder = async (req, res) => {
 
         await PaymentOrder.create({
             userId: req.user.userId,
+            userName: req.user.userName,
             orderId: order.id,
             amount,
             currency: order.currency,

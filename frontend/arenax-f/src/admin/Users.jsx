@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   FaSearch,
@@ -8,46 +8,45 @@ import {
   FaWallet,
   FaGamepad,
 } from "react-icons/fa";
+import api from "../api/api";
 
-const dummyUsers = [
-  {
-    _id: "1",
-    name: "Saurabh Kumar",
-    email: "saurabh@gmail.com",
-    gameName: "ArenaXPro",
-    uid: "123456789",
-    role: "admin",
-    wallet: 1250,
-    tournaments: 8,
-    status: "active",
-  },
-  {
-    _id: "2",
-    name: "Rahul",
-    email: "rahul@gmail.com",
-    gameName: "HeadHunter",
-    uid: "987654321",
-    role: "user",
-    wallet: 350,
-    tournaments: 3,
-    status: "active",
-  },
-  {
-    _id: "3",
-    name: "Aman",
-    email: "aman@gmail.com",
-    gameName: "Sniper",
-    uid: "555555555",
-    role: "user",
-    wallet: 0,
-    tournaments: 0,
-    status: "blocked",
-  },
-];
+
 
 export default function Users() {
-  const [users] = useState(dummyUsers);
+  const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  async function fetchUsers() {
+    try {
+      const { data } = await api.get("/api/auth/users");
+      setUsers(data.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  }
+
+  async function handleBlockUser(userId) {
+    try {
+      await api.patch(`/api/auth/user/${userId}/block`);
+      fetchUsers(); // Refresh the user list after blocking
+    } catch (error) {
+      console.error("Error blocking user:", error);
+    }
+  }
+
+  async function handleUnblockUser(userId) {
+    try {
+      await api.patch(`/api/auth/user/${userId}/unblock`);
+      fetchUsers(); // Refresh the user list after unblocking
+    } catch (error) {
+      console.error("Error unblocking user:", error);
+    }
+  }
 
   const filteredUsers = useMemo(() => {
     return users.filter((item) => {
@@ -133,11 +132,10 @@ export default function Users() {
 
                 <span
                   className={` text-sm capitalize
-                  ${
-                    user.role === "admin"
+                  ${user.role === "admin"
                       ? "font-bold text-green-600 text-xl"
                       : "font-bold text-blue-600 text-xl"
-                  }`}
+                    }`}
                 >
                   {user.role}
                 </span>
@@ -156,29 +154,15 @@ export default function Users() {
                   <span>{user.uid}</span>
                 </div>
 
-                <div className="flex justify-between">
-                  <span className="text-gray-500 flex items-center gap-2">
-                    <FaWallet />
-                    Wallet
-                  </span>
-                  <span>₹ {user.wallet}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-500 flex items-center gap-2">
-                    <FaGamepad />
-                    Tournaments
-                  </span>
-                  <span>{user.tournaments}</span>
-                </div>
-
               </div>
 
               <div className="mt-8 flex gap-3">
 
-                {user.status === "active" ? (
+                {user.isBlocked === false ? (
 
-                  <button className="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white flex items-center justify-center gap-2">
+                  <button
+                  onClick={() => handleBlockUser(user._id)}
+                  className="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white flex items-center justify-center gap-2">
 
                     <FaUserSlash />
 
@@ -188,7 +172,9 @@ export default function Users() {
 
                 ) : (
 
-                  <button className="flex-1 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => handleUnblockUser(user._id)}
+                    className="flex-1 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2">
 
                     <FaUserCheck />
 

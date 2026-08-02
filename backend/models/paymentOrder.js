@@ -8,6 +8,12 @@ const paymentOrderSchema = new mongoose.Schema(
             required: true,
         },
 
+        userName: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+
         orderId: {
             type: String,
             required: true,

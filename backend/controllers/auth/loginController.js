@@ -19,6 +19,14 @@ export const Login = async (req, res) => {
                 success: false
             })
         }
+
+        if (user.isBlocked) {
+            return res.status(403).json({
+                success: false,
+                msg: "Your account has been blocked by admin."
+            });
+        }
+
         const userWithoutPassword = await User.findById(user._id).select("-password");
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) {

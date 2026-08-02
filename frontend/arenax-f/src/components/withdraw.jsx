@@ -245,10 +245,10 @@ export default function Withdraw() {
 
                     {/* Info */}
 
-                    <div className="rounded-2xl bg-cyan-500/10 border border-cyan-500/20 p-4">
+                    <div className="rounded-2xl font-semibold bg-cyan-500/10 border border-cyan-500/20 p-4">
 
                         <p className="text-sm text-cyan-300">
-                            • Minimum withdrawal amount is <strong>₹50</strong>.
+                            • Minimum withdrawal amount is <strong>₹30</strong>.
                         </p>
 
                         <p className="text-sm text-cyan-300 mt-2">

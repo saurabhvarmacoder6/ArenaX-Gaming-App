@@ -7,33 +7,8 @@ import {
     FaArrowRight,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
-const stats = [
-    {
-        title: "Total Users",
-        value: 248,
-        icon: <FaUsers />,
-        color: "bg-sky-100 text-sky-600",
-    },
-    {
-        title: "Tournaments",
-        value: 18,
-        icon: <FaGamepad />,
-        color: "bg-violet-100 text-violet-600",
-    },
-    {
-        title: "Pending Withdraw",
-        value: 6,
-        icon: <FaMoneyCheckAlt />,
-        color: "bg-amber-100 text-amber-600",
-    },
-    {
-        title: "Revenue",
-        value: "₹12,480",
-        icon: <FaWallet />,
-        color: "bg-green-100 text-green-600",
-    },
-];
+import api from "../api/api";
+import { useEffect, useState } from "react";
 
 const actions = [
     {
@@ -59,6 +34,22 @@ const actions = [
 ];
 
 export default function Dashboard() {
+
+    const [totalUsers, setTotalUsers] = useState(0);
+
+    useEffect(() => {
+        fetchTotalUsers();
+    }, []);
+
+    async function fetchTotalUsers() {
+        try {
+            const { data } = await api.get("/api/auth/users");
+            setTotalUsers(data.data.length);
+        } catch (error) {
+            console.error("Error fetching total users:", error);
+        }
+    }
+
     return (
         <div className="space-y-8 overflow-auto p-6 h-full w-full bg-gray-100">
 
@@ -83,40 +74,16 @@ export default function Dashboard() {
             {/* Stats */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div className="bg-white flex gap-4 justify-between items-center rounded-3xl border border-gray-200 shadow-sm p-6">
 
-                {stats.map((item) => (
+                    <h2 className="text-lg font-semibold flex gap-4 items-center text-gray-900">
+                        <FaUsers /> Total Users
+                    </h2>
+                    <p className="text-3xl font-bold text-blue-400 font-mono">
+                        {totalUsers}
+                    </p>
 
-                    <motion.div
-                        whileHover={{ y: -3 }}
-                        key={item.title}
-                        className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6"
-                    >
-
-                        <div className="flex items-center justify-between">
-
-                            <div>
-
-                                <p className="text-sm text-gray-500">
-                                    {item.title}
-                                </p>
-
-                                <h2 className="text-3xl font-bold mt-3 text-gray-900">
-                                    {item.value}
-                                </h2>
-
-                            </div>
-
-                            <div
-                                className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${item.color}`}
-                            >
-                                {item.icon}
-                            </div>
-
-                        </div>
-
-                    </motion.div>
-
-                ))}
+                </div>
 
             </div>
 
