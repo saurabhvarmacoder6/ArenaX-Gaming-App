@@ -34,17 +34,31 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         unique: false
     },
+    resetOtp: {
+        type: String,
+        default: null,
+    },
+
+    resetOtpExpire: {
+        type: Date,
+        default: null,
+    },
+    isOtpVerified: {
+        type: Boolean,
+        default: false,
+    },
     role: {
         type: String,
         required: true,
         default: "user",
         enum: ["user", "admin"]
     },
-    isBlocked:{
-        type:Boolean,
-        required:true,
-        default:false
-    }
+    isBlocked: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+
 }, {
     timestamps: true
 })

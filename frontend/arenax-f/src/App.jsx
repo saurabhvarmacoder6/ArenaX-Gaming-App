@@ -23,10 +23,11 @@ import PaymentOrder from './admin/PaymentOrder'
 import Users from './admin/Users'
 import Tournaments from './admin/Tournaments'
 import CreateTournaments from './admin/CreateTournaments'
+import NewPassword from './components/NewPassword'
 function App() {
 
   const location = useLocation();
-  const hideBottomNav = ["/", "/signup", "/login", "/forgot-password", "/admin" ,"/admin/withdraw", "/admin/payment-orders", "/admin/users", "/admin/tournaments", "/admin/create-tournaments"].includes(location.pathname);
+  const hideBottomNav = ["/", "/signup", "/login", "/forgot-password", "/new-password", "/admin" ,"/admin/withdraw", "/admin/payment-orders", "/admin/users", "/admin/tournaments", "/admin/create-tournaments"].includes(location.pathname);
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#09090B]">
       <Routes>
@@ -35,6 +36,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/new-password" element={<NewPassword />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>

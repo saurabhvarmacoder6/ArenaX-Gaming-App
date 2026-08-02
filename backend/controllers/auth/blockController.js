@@ -2,7 +2,6 @@ import Users from "../../models/User.js";
 
 export const blockUser = async (req, res) => {
     const { id } = req.params;
-        console.log("req.user.userId", req.user.userId );
     try {
 
         const user = await Users.findById(id);
