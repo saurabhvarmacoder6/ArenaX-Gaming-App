@@ -1,6 +1,6 @@
 import Users from "../../models/User.js";
 import generateOTP from "../../utils/generateOTP.js";
-import transporter from "../../utils/sendEmail.js";
+import resend from "../../utils/sendEmail.js";
 import emailTemplate from "../../utils/emailTemplate.js";
 
 export const forgotPassword = async (req, res) => {
@@ -33,8 +33,8 @@ export const forgotPassword = async (req, res) => {
 
         await user.save();
 
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
+        await resend.emails.send({
+            from: "ArenaX <onboarding@resend.dev>",
             to: email,
             subject: "ArenaX Password Reset OTP",
             html: emailTemplate(otp),
