@@ -1,4 +1,4 @@
-import Tournament from "../../models/Tournament.js";
+import Tournament from "../../models/tournament.js";
 
 export const getTournament = async (req, res) => {
     try {
