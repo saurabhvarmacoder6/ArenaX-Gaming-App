@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   FaSearch,
@@ -11,63 +11,90 @@ import {
   FaEye,
   FaPlus,
   FaWallet,
+  FaClock,
+  FaMapMarkedAlt,
+  FaCrosshairs,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../api/api";
+import Swal from "sweetalert2"
 
-const dummyTournament = [
-  {
-    _id: "1",
-    title: "BR Solo #12",
-    category: "BR",
-    entryFee: 50,
-    prizePool: 2000,
-    joined: 45,
-    slots: 50,
-    date: "02 Aug 2026",
-    status: "active",
-  },
-  {
-    _id: "2",
-    title: "CS Squad",
-    category: "CS",
-    entryFee: 100,
-    prizePool: 5000,
-    joined: 8,
-    slots: 12,
-    date: "03 Aug 2026",
-    status: "upcoming",
-  },
-  {
-    _id: "3",
-    title: "Lone Wolf",
-    category: "LW",
-    entryFee: 20,
-    prizePool: 400,
-    joined: 16,
-    slots: 16,
-    date: "04 Aug 2026",
-    status: "completed",
-  },
-];
 
 export default function Tournaments() {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
-  const [tournaments] = useState(dummyTournament);
+  const [filter, setFilter] = useState("BR");
+  const [tournaments, setTournaments] = useState([]);
+
+  useEffect(() => {
+    fetchTournaments();
+  }, [filter]);
+
+  async function fetchTournaments() {
+    try {
+      const { data } = await api.get(`/api/auth/tournaments?mode=${filter}`);
+      setTournaments(data.tournaments);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleDelete = async (id) => {
+
+    const result = await Swal.fire({
+      title: "Delete Tournament?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Delete",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+
+      const { data } = await api.delete(`/api/auth/tournament/${id}`);
+
+      if (data.success) {
+
+        Swal.fire({
+          icon: "success",
+          title: "Deleted",
+          text: data.msg,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        fetchTournaments();
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  };
 
   const filteredTournament = useMemo(() => {
     return tournaments.filter((item) => {
-      const matchSearch =
-        item.title.toLowerCase().includes(search.toLowerCase());
+      if (!search) return true;
 
-      const matchFilter =
-        filter === "all" ? true : item.category === filter;
+      const keyword = search.toLowerCase();
 
-      return matchSearch && matchFilter;
+      return (
+        item.title.toLowerCase().includes(keyword) ||
+        item.mode.toLowerCase().includes(keyword) ||
+        item.type.toLowerCase().includes(keyword) ||
+        item.map.toLowerCase().includes(keyword)
+      );
     });
-  }, [search, filter, tournaments]);
+  }, [search, tournaments]);
+
 
   return (
     <div className="space-y-6">
@@ -118,17 +145,16 @@ export default function Tournaments() {
 
       <div className="flex gap-3 flex-wrap">
 
-        {["all", "BR", "CS", "LW"].map((item) => (
+        {["BR", "CS", "LW"].map((item) => (
 
           <button
             key={item}
             onClick={() => setFilter(item)}
             className={`px-5 py-2 rounded-xl transition
-            ${
-              filter === item
+            ${filter === item
                 ? "bg-sky-600 text-white"
                 : "bg-white border border-gray-200"
-            }`}
+              }`}
           >
             {item}
           </button>
@@ -151,82 +177,183 @@ export default function Tournaments() {
               className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6"
             >
 
+              {/* Header */}
+
               <div className="flex justify-between items-start">
 
                 <div>
 
-                  <h2 className="text-2xl font-bold">
+                  <h2 className="text-2xl font-bold text-gray-900">
                     {item.title}
                   </h2>
 
-                  <p className="text-gray-500 mt-1">
-                    {item.category}
-                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+
+                    <span className="px-3 py-1 rounded-full bg-violet-100 text-violet-700 text-xs font-semibold">
+                      {item.mode}
+                    </span>
+
+                    <span className="px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-xs font-semibold">
+                      {item.type}
+                    </span>
+
+                  </div>
 
                 </div>
 
                 <span
-                  className={`px-3 py-1 rounded-full capitalize text-sm
-                  ${
-                    item.status === "active"
+                  className={`px-3 py-1 rounded-full text-sm font-semibold
+      ${item.status === "Live"
                       ? "bg-green-100 text-green-700"
-                      : item.status === "upcoming"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-gray-200 text-gray-700"
-                  }`}
+                      : item.status === "Upcoming"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
                 >
                   {item.status}
                 </span>
 
               </div>
 
-              <div className="grid grid-cols-2 gap-5 mt-6">
+              {/* Tournament Details */}
+
+              <div className="grid grid-cols-2 gap-5 mt-7">
 
                 <div className="flex items-center gap-3">
-                  <FaCoins className="text-sky-600" />
+
+                  <FaCoins className="text-yellow-500 text-xl" />
+
                   <div>
-                    <p className="text-gray-500 text-sm">Entry Fee</p>
-                    <h3 className="font-semibold">
-                      ₹ {item.entryFee}
+
+                    <p className="text-xs text-gray-500">
+                      Entry Fee
+                    </p>
+
+                    <h3 className="font-bold">
+                      ₹{item.entryFee}
                     </h3>
+
                   </div>
+
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <FaWallet className="text-green-600" />
+
+                  <FaWallet className="text-emerald-500 text-xl" />
+
                   <div>
-                    <p className="text-gray-500 text-sm">Prize Pool</p>
-                    <h3 className="font-semibold">
-                      ₹ {item.prizePool}
+
+                    <p className="text-xs text-gray-500">
+                      Prize Pool
+                    </p>
+
+                    <h3 className="font-bold">
+                      ₹{item.prizePool}
                     </h3>
+
                   </div>
+
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <FaUsers className="text-orange-500" />
+
+                  <FaCrosshairs className="text-red-500 text-xl" />
+
                   <div>
-                    <p className="text-gray-500 text-sm">Slots</p>
-                    <h3 className="font-semibold">
-                      {item.joined}/{item.slots}
+
+                    <p className="text-xs text-gray-500">
+                      Per Kill
+                    </p>
+
+                    <h3 className="font-bold">
+                      ₹{item.perKill}
                     </h3>
+
                   </div>
+
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <FaCalendarAlt className="text-indigo-500" />
+
+                  <FaUsers className="text-indigo-500 text-xl" />
+
                   <div>
-                    <p className="text-gray-500 text-sm">Date</p>
-                    <h3 className="font-semibold">
-                      {item.date}
+
+                    <p className="text-xs text-gray-500">
+                      Slots
+                    </p>
+
+                    <h3 className="font-bold">
+                      {item.totalSlots}
                     </h3>
+
                   </div>
+
+                </div>
+
+                <div className="flex items-center gap-3">
+
+                  <FaMapMarkedAlt className="text-orange-500 text-xl" />
+
+                  <div>
+
+                    <p className="text-xs text-gray-500">
+                      Map
+                    </p>
+
+                    <h3 className="font-bold">
+                      {item.map}
+                    </h3>
+
+                  </div>
+
+                </div>
+
+                <div className="flex items-center gap-3">
+
+                  <FaCalendarAlt className="text-pink-500 text-xl" />
+
+                  <div>
+
+                    <p className="text-xs text-gray-500">
+                      Match Date
+                    </p>
+
+                    <h3 className="font-bold">
+                      {new Date(item.matchDate).toLocaleDateString()}
+                    </h3>
+
+                  </div>
+
+                </div>
+
+                <div className="flex items-center gap-3 col-span-2">
+
+                  <FaClock className="text-sky-500 text-xl" />
+
+                  <div>
+
+                    <p className="text-xs text-gray-500">
+                      Match Time
+                    </p>
+
+                    <h3 className="font-bold">
+                      {item.matchTime}
+                    </h3>
+
+                  </div>
+
                 </div>
 
               </div>
 
               <div className="flex gap-3 mt-8">
 
-                <button className="flex-1 py-3 rounded-xl bg-sky-600 text-white hover:bg-sky-700 flex items-center justify-center gap-2">
+                <button
+                  onClick={() =>
+                    navigate(`/admin/update-tournaments/${item._id}`)
+                  }
+                  className="flex-1 py-3 rounded-xl bg-sky-600 text-white hover:bg-sky-700 flex items-center justify-center gap-2">
 
                   <FaEdit />
 
@@ -242,7 +369,9 @@ export default function Tournaments() {
 
                 </button>
 
-                <button className="flex-1 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 flex items-center justify-center gap-2">
+                <button
+                  onClick={()=>handleDelete(item._id)}
+                  className="flex-1 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 flex items-center justify-center gap-2">
 
                   <FaTrash />
 

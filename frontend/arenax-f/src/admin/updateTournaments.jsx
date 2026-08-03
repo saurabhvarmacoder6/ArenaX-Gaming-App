@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
     FaGamepad,
@@ -9,7 +9,9 @@ import {
     FaUsers,
 } from "react-icons/fa";
 import api from "../api/api"
-export default function CreateTournament() {
+import { useParams } from "react-router-dom";
+export default function UpdateTournament() {
+    const { id } = useParams()
 
     const [formData, setFormData] = useState({
         title: "",
@@ -22,7 +24,26 @@ export default function CreateTournament() {
         map: "",
         matchDate: "",
         matchTime: "",
+        status: "upcoming",
+        roomId: "",
+        roomPassword: "",
     });
+
+    // const [title, setTitle] = useState("")
+    // const [mode, setMode] = useState("")
+    // const [type, setType] = useState("")
+    // const [entryFee, setEntryFee] = useState(0)
+    // const [perKill, setPerKill] = useState(0)
+    // const [prizePool, setPrizePool] = useState(0)
+    // const [totalSlots, setTotalSlots] = useState(0)
+    // const [map, setMap] = useState("")
+    // const [matchDate, setMatchDate] = useState("")
+    // const [matchTime, setMatchTime] = useState("")
+    // const [status, setStatus] = useState("")
+
+    useEffect(() => {
+        getData()
+    }, [])
 
     function handleChange(e) {
 
@@ -33,24 +54,27 @@ export default function CreateTournament() {
 
     }
 
-    async function handleSubmit(e) {
-
-        e.preventDefault();
+    async function getData() {
 
         try {
-            const { data } = await api.post("/api/auth/tournament/create", formData);
-            if(data.success) {
+            const { data } = await api.get(`/api/auth/tournament/${id}`);
+            if (data.success) {
                 setFormData({
-                    title: "",
-                    mode: "",
-                    type: "",
-                    entryFee: "",
-                    perKill: "",
-                    prizePool: "",
-                    totalSlots: "",
-                    map: "",
-                    matchDate: "",
-                    matchTime: "",
+                    title: data.tournament.title,
+                    mode: data.tournament.mode,
+                    type: data.tournament.type,
+                    entryFee: data.tournament.entryFee,
+                    perKill: data.tournament.perKill,
+                    prizePool: data.tournament.prizePool,
+                    totalSlots: data.tournament.totalSlots,
+                    map: data.tournament.map,
+                    matchDate: new Date(data.tournament.matchDate)
+                        .toISOString()
+                        .split("T")[0],
+                    matchTime: data.tournament.matchTime,
+                    status: data.tournament.status,
+                    roomId: data.tournament.roomId,
+                    roomPassword: data.tournament.roomPassword,
                 });
             }
         } catch (error) {
@@ -59,12 +83,26 @@ export default function CreateTournament() {
 
     }
 
+
+    async function handleSubmit() {
+
+        try {
+            const { data } = await api.put(`/api/auth/tournament/${id}`, formData)
+            if (data.success) {
+                alert("Data updated")
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+
+
     return (
 
         <div className="max-w-6xl mx-auto">
 
-            <motion.form
-                onSubmit={handleSubmit}
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-white rounded-3xl shadow-sm border border-gray-200 p-8 space-y-8"
@@ -178,15 +216,44 @@ export default function CreateTournament() {
 
                 </div>
 
+                {/* Room Info */}
+
+                <div className="grid md:grid-cols-2 gap-6">
+
+                    <Input
+                        label="Room ID (Optional)"
+                        name="roomId"
+                        value={formData.roomId}
+                        onChange={handleChange}
+                    />
+
+                    <Input
+                        label="Room Password (Optional)"
+                        name="roomPassword"
+                        value={formData.roomPassword}
+                        onChange={handleChange}
+                    />
+
+                    <Select
+                        label="Status (Optional)"
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        options={["Upcoming", "Live", "Completed"]}
+                    />
+
+                </div>
+
                 {/* Button */}
 
                 <button
-                    className="w-full py-4 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg"
+                    onClick={handleSubmit}
+                    className="w-full py-4 rounded-2xl bg-gray-600 hover:bg-gray-700 text-white font-semibold text-lg"
                 >
-                    Create Tournament
+                    Update Tournament
                 </button>
 
-            </motion.form>
+            </motion.div>
 
         </div>
 

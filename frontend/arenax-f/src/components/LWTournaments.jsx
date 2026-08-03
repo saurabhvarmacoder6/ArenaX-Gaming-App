@@ -1,137 +1,69 @@
-// ===============================================
-// IMPORTS
-// ===============================================
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import lwsolo from "../img/lwsolo.png";
 import lwduo from "../img/lwduo.png";
 import {
   FaArrowLeft,
   FaSearch,
-  FaCrosshairs,
+  FaFire,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
-// ===============================================
+// ===============================
 // LW TOURNAMENT PAGE
-// ===============================================
+// ===============================
 
 const LWTournament = () => {
 
   const navigate = useNavigate();
 
-  // ===============================================
-  // STATES
-  // ===============================================
+  // ===============================
+  // FILTER STATE
+  // ===============================
+  const [selectedStatus, setSelectedStatus] = useState("Upcoming");
+  const [selectedFilter, setSelectedFilter] = useState("Solo");
+  const [tournaments, setTournaments] = useState([]);
 
-  const [selectedFilter, setSelectedFilter] = useState("All");
-  const [search, setSearch] = useState("");
+  useEffect(() => {
+    fetchTournaments();
+  }, []);
 
-  // ===============================================
-  // DUMMY DATA
-  // Backend se replace hoga
-  // ===============================================
+  async function fetchTournaments() {
+    try {
+      const { data } = await api.get("/api/auth/tournaments?mode=LW");
+      setTournaments(data.tournaments);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-  const tournaments = [
 
-    {
-      id: 1,
-      title: "LW 1v1 Night",
-      mode: "1v1",
-      banner: lwsolo,
-      entryFee: 20,
-      prizePool: 200,
-      totalSlots: 2,
-      joinedSlots: 1,
-      map: "Iron Cage",
-      date: "25 July",
-      time: "08:00 PM",
-      status: "LIVE",
-    },
-
-    {
-      id: 2,
-      title: "Weekend Duel",
-      mode: "1v1",
-      banner: lwsolo,
-      entryFee: 30,
-      prizePool: 350,
-      totalSlots: 2,
-      joinedSlots: 2,
-      map: "Iron Cage",
-      date: "26 July",
-      time: "09:00 PM",
-      status: "UPCOMING",
-    },
-
-    {
-      id: 3,
-      title: "LW Duo Clash",
-      mode: "2v2",
-      banner: lwduo,
-      entryFee: 50,
-      prizePool: 600,
-      totalSlots: 4,
-      joinedSlots: 3,
-      map: "Iron Cage",
-      date: "27 July",
-      time: "07:30 PM",
-      status: "LIVE",
-    },
-
-    {
-      id: 4,
-      title: "Pro Duo League",
-      mode: "2v2",
-      banner: lwduo,
-      entryFee: 80,
-      prizePool: 1000,
-      totalSlots: 4,
-      joinedSlots: 2,
-      map: "Iron Cage",
-      date: "28 July",
-      time: "10:00 PM",
-      status: "UPCOMING",
-    },
-
-  ];
-
-  // ===============================================
-  // SEARCH + FILTER LOGIC
-  // ===============================================
+  // ===============================
+  // FILTER + SEARCH LOGIC
+  // ===============================
 
   const filteredTournament = useMemo(() => {
-
     return tournaments.filter((item) => {
+      const typeMatch = item.type === selectedFilter;
+      const statusMatch = item.status === selectedStatus;
 
-      const filterMatch =
-        selectedFilter === "All"
-          ? true
-          : item.mode === selectedFilter;
-
-      const searchMatch =
-        item.title
-          .toLowerCase()
-          .includes(search.toLowerCase());
-
-      return filterMatch && searchMatch;
-
+      return typeMatch && statusMatch;
     });
+  }, [tournaments, selectedFilter, selectedStatus]);
 
-  }, [selectedFilter, search]);
-
-  // ===============================================
+  // ===============================
   // UI
-  // ===============================================
+  // ===============================
 
   return (
 
     <div className="min-h-screen bg-[#09090F] text-white pb-40">
 
-      {/* ===============================================
-          HEADER
-      =============================================== */}
+      {/* ===============================
+          TOP HEADER
+      =============================== */}
 
       <div className="sticky top-0 z-50 backdrop-blur-xl bg-[#09090F]/90 border-b border-white/10">
 
@@ -141,19 +73,19 @@ const LWTournament = () => {
 
             <button
               onClick={() => navigate(-1)}
-              className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-600 transition"
+              className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-violet-600 transition"
             >
               <FaArrowLeft />
             </button>
 
             <div className="text-start flex-1 ml-4">
 
-              <h1 className="text-2xl font-bold">
-                Lone Wolf
+              <h1 className="text-2xl font-bold tracking-wide">
+                Clash Squad
               </h1>
 
               <p className="text-sm font-semibold text-gray-400">
-                Challenge Your Opponent
+                Join Premium CS Tournaments
               </p>
 
             </div>
@@ -166,13 +98,13 @@ const LWTournament = () => {
 
       </div>
 
-      {/* ===============================================
+      {/* ===============================
           PAGE CONTENT
-      =============================================== */}
+      =============================== */}
 
       <div className="px-5 pt-6">
 
-        {/* Title */}
+        {/* Heading */}
 
         <motion.div
 
@@ -184,25 +116,22 @@ const LWTournament = () => {
 
         >
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
 
-            <FaCrosshairs className="text-red-500 text-2xl" />
+            <FaFire className="text-orange-500 text-xl" />
 
             <h2 className="text-3xl font-bold">
-              Find Your Opponent
+              Find Your Match
             </h2>
 
           </div>
 
-          <p className="text-gray-400 mt-2 font-semibold">
-            Enter the arena and prove your skills.
+          <p className="text-gray-400 font-semibold mt-2">
+            Compete with the best players and win exciting rewards.
           </p>
 
         </motion.div>
 
-        {/* ===============================================
-            SEARCH BAR
-        =============================================== */}
 
         <motion.div
 
@@ -216,31 +145,47 @@ const LWTournament = () => {
 
         >
 
-          <div className="flex items-center bg-[#171722] rounded-2xl px-4 py-4 border border-white/10">
+        </motion.div>
 
-            <FaSearch className="text-gray-400" />
 
-            <input
+        {/* ===============================
+    STATUS FILTER
+=============================== */}
 
-              type="text"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: .25 }}
+          className="flex gap-3 mt-7 overflow-x-auto scrollbar-hide"
+        >
 
-              placeholder="Search duel..."
+          {["Live", "Upcoming", "Completed"].map((item) => (
 
-              value={search}
+            <button
+              key={item}
+              onClick={() => setSelectedStatus(item)}
+              className={`px-5 py-3 text-sm rounded-full whitespace-nowrap font-semibold transition-all duration-300
 
-              onChange={(e) => setSearch(e.target.value)}
+      ${selectedStatus === item
+                  ? item === "Live"
+                    ? "bg-red-600 shadow-lg shadow-red-600/30"
+                    : item === "Upcoming"
+                      ? "bg-emerald-600 shadow-lg shadow-emerald-600/30"
+                      : "bg-gray-600 shadow-lg shadow-gray-600/30"
+                  : "bg-[#171722] border border-white/10 hover:border-violet-500"
+                }
+      `}
+            >
+              {item}
+            </button>
 
-              className="bg-transparent outline-none ml-3 w-full placeholder:text-gray-500"
-
-            />
-
-          </div>
+          ))}
 
         </motion.div>
 
-        {/* ===============================================
+        {/* ===============================
             FILTER BUTTONS
-        =============================================== */}
+        =============================== */}
 
         <motion.div
 
@@ -254,286 +199,258 @@ const LWTournament = () => {
 
         >
 
-          {["All", "1v1", "2v2"].map((item) => (
-
+          {["Solo", "Duo"].map((item) => (
             <button
-
               key={item}
-
               onClick={() => setSelectedFilter(item)}
+              className={`px-6 py-3 rounded-full transition
 
-              className={`px-6 py-3 rounded-full whitespace-nowrap transition-all duration-300
-
-              ${
-                selectedFilter === item
-                  ? "bg-red-600 shadow-lg shadow-red-600/30"
-                  : "bg-[#171722] border border-white/10 hover:border-red-500"
-              }
-
-              `}
-
+      ${selectedFilter === item
+                  ? "bg-orange-600"
+                  : "bg-[#171722] border border-white/10"
+                }
+    `}
             >
-
               {item}
-
             </button>
-
           ))}
 
         </motion.div>
 
-        {/* ===============================================
+        {/* ===============================
             TOURNAMENT CARDS
-            PART 2 STARTS HERE
-        =============================================== */}
-
-      {/* ===============================================
+            PART - 2 START HERE
+        =============================== */}
+        {/* ===============================
     TOURNAMENT CARDS
-=============================================== */}
+=============================== */}
 
-<div className="mt-8 space-y-6">
+        <div className="mt-8 space-y-6">
 
-  {filteredTournament.length > 0 ? (
+          {filteredTournament.length > 0 ? (
 
-    filteredTournament.map((tournament, index) => {
+            filteredTournament.map((tournament, index) => {
 
-      const progress =
-        (tournament.joinedSlots / tournament.totalSlots) * 100;
+              const progress =
+                (tournament.joinedPlayers / tournament.totalSlots) * 100;
 
-      const matchReady =
-        tournament.joinedSlots === tournament.totalSlots;
-
-      return (
-
-        <motion.div
-          key={tournament.id}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: .45,
-            delay: index * .08,
-          }}
-          whileHover={{
-            scale: 1.015,
-          }}
-          className="rounded-3xl overflow-hidden border border-white/10 bg-[#171722]"
-        >
-
-          {/* ===============================================
-              TOP SECTION
-          =============================================== */}
-
-          <div className="relative h-44 ">
-            <img src={tournament.banner} alt={tournament.title} className="h-full w-full object-cover" />
-            {/* Status */}
-
-            <div
-              className={`absolute top-1 left-1 px-4 py-2 rounded-full text-xs font-bold tracking-wider
-
-              ${
-                tournament.status === "LIVE"
-                  ? "bg-red-400"
-                  : "bg-emerald-500"
-              }
-
-              `}
-            >
-              {tournament.status}
-            </div>
-
-          </div>
-
-          {/* ===============================================
-              CONTENT
-          =============================================== */}
-
-          <div className="p-5">
-
-            <h2 className="text-2xl font-bold">
-
-              {tournament.title}
-
-            </h2>
-
-            <p className="text-gray-400 font-semibold mt-1">
-
-              Only the strongest survives.
-
-            </p>
-
-            
-
-            {/* INFO */}
-
-            <div className="grid grid-cols-2 gap-3 font-semibold mt-6">
-
-              <div className="bg-white/5 rounded-xl  p-4">
-
-                <p className="text-gray-400 text-sm">
-
-                  Entry Fee
-
-                </p>
-
-                <h3 className="font-bold text-xl mt-1">
-
-                  ₹{tournament.entryFee}
-
-                </h3>
-
-              </div>
-
-              <div className="bg-white/5 rounded-xl p-4">
-
-                <p className="text-gray-400 text-sm">
-
-                  Prize Pool
-
-                </p>
-
-                <h3 className="font-bold text-xl text-yellow-400 mt-1">
-
-                  ₹{tournament.prizePool}
-
-                </h3>
-
-              </div>
-
-            </div>
-
-            {/* MAP */}
-
-            <div className="flex font-semibold justify-between mt-6 text-sm text-gray-400">
-
-              <span>
-
-                📍 {tournament.map}
-
-              </span>
-
-              <span>
-
-                👥 {tournament.joinedSlots}/{tournament.totalSlots}
-
-              </span>
-
-            </div>
-
-            <div className="flex font-semibold justify-between mt-2 text-sm text-gray-400">
-
-              <span>
-
-                📅 {tournament.date}
-
-              </span>
-
-              <span>
-
-                🕒 {tournament.time}
-
-              </span>
-
-            </div>
-
-            {/* PROGRESS */}
-
-            <div className="mt-6">
-
-              <div className="flex font-semibold justify-between text-sm mb-2">
-
-                <span>
-
-                  Players Joined
-
-                </span>
-
-                <span>
-
-                  {Math.floor(progress)}%
-
-                </span>
-
-              </div>
-
-              <div className="w-full h-3 rounded-full bg-white/10 overflow-hidden">
+              return (
 
                 <motion.div
-
-                  initial={{ width: 0 }}
-
-                  animate={{
-                    width: `${progress}%`,
-                  }}
-
+                  key={tournament._id}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    duration: 1,
+                    duration: .45,
+                    delay: index * .08,
                   }}
+                  whileHover={{
+                    scale: 1.015,
+                  }}
+                  className="rounded-3xl overflow-hidden border border-white/10 bg-[#171722]"
+                >
 
-                  className="h-full rounded-full bg-linear-to-r from-red-500 to-orange-500"
+                  {/* ===============================
+              CARD BANNER
+          =============================== */}
 
-                />
+                  <div className="relative h-44 ">
+                    <img
+                      src={
+                        tournament.type === "Solo"
+                          ? lwsolo : lwduo
+                      }
+                      alt={tournament.title}
+                      className="h-full w-full object-cover"
+                    />
+                    {/* Status */}
 
-              </div>
+                    <div
+                      className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold
 
-            </div>
+  ${tournament.status === "Upcoming"
+                          ? "bg-emerald-500"
+                          : tournament.status === "Live"
+                            ? "bg-red-500"
+                            : "bg-gray-500"
+                        }
 
-            {/* BUTTONS */}
+`}
+                    >
+                      {tournament.status}
+                    </div>
 
-            <div className="flex gap-3 mt-7">
+                  </div>
 
-              <button
-              onClick={() => navigate("/detail")}
-              className="flex-1 py-3 rounded-2xl border border-red-500 text-red-400 hover:bg-red-500 hover:text-white transition">
+                  {/* ===============================
+              CARD CONTENT
+          =============================== */}
 
-                Details
+                  <div className="p-5">
 
-              </button>
+                    {/* Tournament Name */}
 
-              <button className="flex-1 py-3 rounded-2xl bg-linear-to-r from-red-600 to-orange-500 hover:scale-[1.03] transition font-semibold">
+                    <h2 className="text-2xl font-bold">
+                      {tournament.title}
+                    </h2>
 
-                Join Battle
+                    <p className="text-gray-400 font-semibold mt-1">
+                      Join and dominate the battlefield.
+                    </p>
 
-              </button>
+                    {/* Info Chips */}
 
-            </div>
+                    <div className="grid grid-cols-2 font-semibold gap-3 mt-6">
 
-          </div>
+                      <div className="bg-white/5 rounded-2xl p-4">
 
-        </motion.div>
+                        <p className="text-gray-400 text-sm">
+                          Entry Fee
+                        </p>
 
-      );
+                        <h3 className="text-xl font-bold mt-1">
+                          ₹{tournament.entryFee}
+                        </h3>
 
-    })
+                      </div>
 
-  ) : (
+                      <div className="bg-white/5 rounded-2xl p-4">
 
-    <motion.div
+                        <p className="text-gray-400 text-sm">
+                          Prize Pool
+                        </p>
 
-      initial={{ opacity: 0 }}
+                        <h3 className="text-xl font-bold mt-1 text-green-400">
+                          ₹{tournament.prizePool}
+                        </h3>
 
-      animate={{ opacity: 1 }}
+                      </div>
 
-      className="text-center py-24"
+                    </div>
 
-    >
+                    {/* Map & Time */}
 
-      <h2 className="text-3xl font-bold">
+                    <div className="flex justify-between mt-6 font-semibold text-sm text-gray-400">
 
-         No Duel Found
+                      <span>
+                        🗺 {tournament.map}
+                      </span>
 
-      </h2>
+                      <span>
+                        📅{" "}
+                        {new Date(tournament.matchDate).toLocaleDateString("en-IN")}
+                      </span>
 
-      <p className="text-gray-400 mt-3">
+                    </div>
 
-        Try changing the filter or search keyword.
+                    <div className="flex justify-between mt-2 font-semibold text-sm text-gray-400">
 
-      </p>
+                      <span>
+                        ⏰ {tournament.matchTime}
+                      </span>
 
-    </motion.div>
+                      <span>
+                        👥 {tournament.joinedPlayers}/{tournament.totalSlots}
+                      </span>
 
-  )}
+                    </div>
 
-</div>
+                    {/* ===============================
+                SLOT PROGRESS
+            =============================== */}
+
+                    <div className="mt-6">
+
+                      <div className="flex justify-between font-semibold text-sm mb-2">
+
+                        <span>Slots Filled</span>
+
+                        <span>
+                          {Math.floor(progress)}%
+                        </span>
+
+                      </div>
+
+                      <div className="w-full h-3 rounded-full bg-white/10 overflow-hidden">
+
+                        <motion.div
+
+                          initial={{ width: 0 }}
+
+                          animate={{
+                            width: `${progress}%`,
+                          }}
+
+                          transition={{
+                            duration: 1,
+                          }}
+
+                          className="h-full rounded-full bg-linear-to-r from-orange-500 to-yellow-500"
+
+                        />
+
+                      </div>
+
+                    </div>
+
+                    {/* ===============================
+                BUTTONS
+            =============================== */}
+
+                    <div className="flex gap-3 mt-7">
+
+                      <button
+                        onClick={() => navigate(`/detail/${tournament._id}`)}
+                        className="flex-1 py-3 rounded-2xl border border-orange-500 text-orange-400 hover:bg-orange-500 hover:text-white transition"
+                      >
+                        Details
+                      </button>
+
+                      <button
+                        className="flex-1 py-3 rounded-2xl bg-linear-to-r from-orange-600 to-yellow-600 font-semibold hover:scale-[1.03] transition"
+                      >
+                        Join Now
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                </motion.div>
+
+              );
+
+            })
+
+          ) : (
+
+            /* ===============================
+                EMPTY STATE
+            =============================== */
+
+            <motion.div
+
+              initial={{ opacity: 0 }}
+
+              animate={{ opacity: 1 }}
+
+              className="text-center py-24"
+
+            >
+
+              <h2 className="text-3xl font-bold">
+                No Tournament Found
+              </h2>
+
+              <p className="text-gray-400 mt-3">
+                Try changing filters or search keywords.
+              </p>
+
+            </motion.div>
+
+          )}
+
+        </div>
 
       </div>
 

@@ -24,10 +24,14 @@ import Users from './admin/Users'
 import Tournaments from './admin/Tournaments'
 import CreateTournaments from './admin/CreateTournaments'
 import NewPassword from './components/NewPassword'
+import UpdateTournament from './admin/updateTournaments'
 function App() {
 
   const location = useLocation();
-  const hideBottomNav = ["/", "/signup", "/login", "/forgot-password", "/new-password", "/admin" ,"/admin/withdraw", "/admin/payment-orders", "/admin/users", "/admin/tournaments", "/admin/create-tournaments"].includes(location.pathname);
+  const hideBottomNav = ["/", "/signup", "/login", "/forgot-password", "/new-password",
+    "/admin", "/admin/withdraw", "/admin/payment-orders", "/admin/users", "/admin/tournaments",
+    "/admin/create-tournaments"].includes(location.pathname) ||
+    location.pathname.startsWith("/admin/update-tournaments/");
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#09090B]">
       <Routes>
@@ -44,7 +48,7 @@ function App() {
           <Route path="/br" element={<BRTournaments />} />
           <Route path="/cs" element={<CSTournaments />} />
           <Route path="/lw" element={<LWTournaments />} />
-          <Route path="/detail" element={<TournamentDetails />} />
+          <Route path="/detail/:id" element={<TournamentDetails />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/order-data" element={<PaymentOrderData />} />
@@ -59,6 +63,7 @@ function App() {
             <Route path="users" element={<Users />} />
             <Route path="tournaments" element={<Tournaments />} />
             <Route path="create-tournaments" element={<CreateTournaments />} />
+            <Route path="update-tournaments/:id" element={<UpdateTournament />} />
           </Route>
         </Route>
 
