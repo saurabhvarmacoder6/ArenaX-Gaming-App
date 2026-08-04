@@ -14,6 +14,7 @@ import {
     FaEyeSlash,
 } from "react-icons/fa";
 import api from "../api/api";
+import { showError, showSuccess } from "../utils/toast";
 
 const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -31,17 +32,14 @@ const Signup = () => {
     const handleSubmit = async () => {
         try {
             const { data } = await api.post("/api/auth/signup", formData);
-
+            showSuccess(data.msg)
             if (data.success) {
-                console.log(data.user);
                 setUser(data.user);
                 navigate("/home");
-            } else {
-                alert("Enter Valid Data");
             }
 
         } catch (err) {
-            alert(err.response?.data?.message || "Something went wrong");
+            showError(err)
         }
     };
 

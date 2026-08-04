@@ -1,4 +1,5 @@
 import Splash from './components/Splash'
+import { Toaster } from "react-hot-toast";
 import Home from './components/Home'
 import BRTournaments from './components/BRTournaments'
 import CSTournaments from './components/CSTournaments'
@@ -25,6 +26,7 @@ import Tournaments from './admin/Tournaments'
 import CreateTournaments from './admin/CreateTournaments'
 import NewPassword from './components/NewPassword'
 import UpdateTournament from './admin/updateTournaments'
+import JoinTournament from './components/JoinTournament'
 function App() {
 
   const location = useLocation();
@@ -34,6 +36,19 @@ function App() {
     location.pathname.startsWith("/admin/update-tournaments/");
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#09090B]">
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "#171722",
+            color: "#fff",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: "16px",
+          },
+        }}
+      />
       <Routes>
         <Route path="/" element={<Splash />} />
         <Route element={<PublicRoute />}>
@@ -52,6 +67,7 @@ function App() {
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/order-data" element={<PaymentOrderData />} />
+          <Route path="/join-tournament/:id" element={<JoinTournament />} />
           <Route path="/withdraw" element={<Withdraw />} />
         </Route>
 

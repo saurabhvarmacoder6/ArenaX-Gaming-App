@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import api from "../api/api"
 import { useParams } from "react-router-dom";
+import { showSuccess } from "../utils/toast";
 export default function UpdateTournament() {
     const { id } = useParams()
 
@@ -29,17 +30,6 @@ export default function UpdateTournament() {
         roomPassword: "",
     });
 
-    // const [title, setTitle] = useState("")
-    // const [mode, setMode] = useState("")
-    // const [type, setType] = useState("")
-    // const [entryFee, setEntryFee] = useState(0)
-    // const [perKill, setPerKill] = useState(0)
-    // const [prizePool, setPrizePool] = useState(0)
-    // const [totalSlots, setTotalSlots] = useState(0)
-    // const [map, setMap] = useState("")
-    // const [matchDate, setMatchDate] = useState("")
-    // const [matchTime, setMatchTime] = useState("")
-    // const [status, setStatus] = useState("")
 
     useEffect(() => {
         getData()
@@ -88,11 +78,10 @@ export default function UpdateTournament() {
 
         try {
             const { data } = await api.put(`/api/auth/tournament/${id}`, formData)
-            if (data.success) {
-                alert("Data updated")
-            }
+            showSuccess(data.msg)
         } catch (error) {
             console.error(error);
+            showSuccess(error)
         }
 
     }

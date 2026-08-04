@@ -31,7 +31,7 @@ const TournamentDetails = () => {
 
     const navigate = useNavigate();
     const [showRules, setShowRules] = useState(false);
-    const [tournamentDetail, setTournamentDetail] = useState([]);
+    const [tournamentDetail, setTournamentDetail] = useState({});
 
     useEffect(() => {
         fetchTournamentDetail();
@@ -40,16 +40,21 @@ const TournamentDetails = () => {
     async function fetchTournamentDetail() {
         try {
             const { data } = await api.get(`/api/auth/tournament/${id}`);
-            console.log(data);
-
             setTournamentDetail(data.tournament);
+
         } catch (err) {
             console.log(err);
         }
     }
 
-    const progress =
-        (tournamentDetail.joinedPlayers / tournamentDetail.totalSlots) * 100;
+    const progress = tournamentDetail.totalSlots
+        ? (tournamentDetail.joinedPlayers / tournamentDetail.totalSlots) * 100
+        : 0;
+
+    const totalSlots = tournamentDetail.totalSlots ?? 0;
+    const joinedPlayers = tournamentDetail.joinedPlayers ?? 0;
+    const slotsLeft = totalSlots - joinedPlayers;
+
 
     return (
         <div className="min-h-screen bg-[#09090F] text-white pb-28">
@@ -136,44 +141,28 @@ const TournamentDetails = () => {
 
                         <div className="flex gap-3 mt-5">
 
-                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-linear-to-tr via-red-600 to-red-700 text-white">
+                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-red-700 text-white">
 
                                 {tournamentDetail.mode}
 
                             </span>
 
-                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-linear-to-tr via-blue-600 to-blue-700 text-white">
+                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-blue-700 text-white">
 
                                 {tournamentDetail.type}
 
                             </span>
 
-                            <span
 
-                                className={`
-              px-4 py-2 rounded-full text-xs font-bold flex items-center
-
-              ${tournamentDetail.status === "Upcoming"
-                                        ? "bg-green-500/20 text-green-400"
-
-                                        : tournamentDetail.status === "Live"
-
-                                            ? "bg-red-500/20 text-red-400"
-
-                                            : "bg-gray-500/20 text-gray-300"
-                                    }
-
-              `}
-
-                            >
-
-                                {tournamentDetail.status}
-
-                            </span>
 
                         </div>
-
                     </div>
+
+                    <button className="px-6 py-2 w-full text-lg font-bold rounded-full bg-green-400 text-black">
+
+                        Joined Players
+
+                    </button>
 
                     {/* ================= GRID ================= */}
 
@@ -285,7 +274,7 @@ const TournamentDetails = () => {
 
                             <h2 className="font-bold mt-2">
 
-                                {tournamentDetail.map}
+                                {tournamentDetail?.map}
 
                             </h2>
 
@@ -300,10 +289,7 @@ const TournamentDetails = () => {
                             </p>
 
                             <h2 className="font-bold mt-2 text-violet-400">
-
-                                {tournamentDetail.totalSlots -
-                                    tournamentDetail.joinedPlayers}
-
+                                {slotsLeft}
                             </h2>
 
                         </div>
@@ -350,8 +336,7 @@ const TournamentDetails = () => {
 
                         <p className="text-center text-gray-400 text-sm mt-4">
 
-                            {tournamentDetail.totalSlots -
-                                tournamentDetail.joinedPlayers}
+                            {slotsLeft}
 
                             {" "}Slots Available
 

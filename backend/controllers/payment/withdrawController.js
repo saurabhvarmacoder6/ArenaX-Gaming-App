@@ -2,7 +2,6 @@ import Withdrawal from "../../models/withdraw.js";
 import Wallet from "../../models/Wallet.js";
 
 export const postWithdrawData = async (req, res) => {
-    console.log(req.user);
         try {
         const { amount, upiId, adminNote } = req.body;
 

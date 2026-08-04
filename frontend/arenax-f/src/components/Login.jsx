@@ -11,6 +11,7 @@ import {
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import api from "../api/api";
+import { showError, showSuccess } from "../utils/toast";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +25,7 @@ const Login = () => {
     const handleSubmit = async () => {
         try {
             const { data } = await api.post("/api/auth/login", formData);
-
+            showSuccess(data.msg)
             if (data.success) {
                 setUser(data.user);
                 navigate("/home");
@@ -32,7 +33,7 @@ const Login = () => {
                 alert("Enter Valid Email Or Password");
             }
         } catch (err) {
-            alert(err.response?.data?.message || "Something went wrong");
+            showError(err)
         }
     };
 

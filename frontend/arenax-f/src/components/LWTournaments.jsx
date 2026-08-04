@@ -396,21 +396,31 @@ const LWTournament = () => {
                     {/* ===============================
                 BUTTONS
             =============================== */}
-
                     <div className="flex gap-3 mt-7">
 
                       <button
                         onClick={() => navigate(`/detail/${tournament._id}`)}
+                        hidden={tournament.status === "Live" ? true : false}
                         className="flex-1 py-3 rounded-2xl border border-orange-500 text-orange-400 hover:bg-orange-500 hover:text-white transition"
                       >
                         Details
                       </button>
 
-                      <button
-                        className="flex-1 py-3 rounded-2xl bg-linear-to-r from-orange-600 to-yellow-600 font-semibold hover:scale-[1.03] transition"
-                      >
-                        Join Now
-                      </button>
+
+                      {tournament.status === "Live" ?
+                        <button
+                          className="flex-1 py-3 rounded-2xl bg-red-600 font-semibold hover:scale-[1.03] transition"
+                        >
+                          On Live
+                        </button>
+                        : <button
+                         onClick={()=>navigate(`/join-tournament/${tournament._id}`)}
+                          className="flex-1 py-3 rounded-2xl bg-linear-to-r from-orange-600 to-yellow-600 font-semibold hover:scale-[1.03] transition"
+                        >
+                          Join Now
+                        </button>}
+
+
 
                     </div>
 

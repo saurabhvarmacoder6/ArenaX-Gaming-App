@@ -15,13 +15,14 @@ import {
     FaIndianRupeeSign,
 } from "react-icons/fa6";
 import { useEffect, useState } from "react";
+import { showError, showSuccess } from "../utils/toast";
 
 const Wallet = () => {
 
     const [amount, setAmount] = useState(0);
     const [balance, setBalance] = useState()
-    const [transactions ,setTransactions] = useState([])
-
+    const [transactions, setTransactions] = useState([])
+    const navigate = useNavigate();
     useEffect(() => {
         getBalance()
         handleTransactions()
@@ -53,8 +54,10 @@ const Wallet = () => {
             const razorpay = new window.Razorpay(options);
 
             razorpay.open();
+            showSuccess(data.msg)
         } catch (error) {
             console.log(error);
+            showError(data.msg)
         }
     };
 
@@ -68,7 +71,7 @@ const Wallet = () => {
         }
 
     }
-      
+
 
     async function handleTransactions() {
         try {
@@ -78,7 +81,7 @@ const Wallet = () => {
             console.error(error);
         }
     }
-    const navigate = useNavigate();
+
 
 
     return (
@@ -292,7 +295,7 @@ const Wallet = () => {
                     </div>
 
                     <button
-                    onClick={()=>navigate("/withdraw")}
+                        onClick={() => navigate("/withdraw")}
                         className="mt-6 w-full py-4 rounded-2xl border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/20 transition font-semibold"
                     >
                         Withdraw Now
@@ -405,8 +408,8 @@ const Wallet = () => {
 
                                             <div
                                                 className={`size-10 rounded-full flex items-center justify-center ${item.type === "credit"
-                                                        ? "bg-green-500/15"
-                                                        : "bg-red-500/15"
+                                                    ? "bg-green-500/15"
+                                                    : "bg-red-500/15"
                                                     }`}
                                             >
                                                 {item.type === "credit" ? (
@@ -422,7 +425,7 @@ const Wallet = () => {
                                                     {item.type}
                                                 </h2>
 
-                                                
+
 
                                             </div>
 
@@ -432,8 +435,8 @@ const Wallet = () => {
 
                                             <h2
                                                 className={`text-lg font-bold ${item.type === "credit"
-                                                        ? "text-green-400"
-                                                        : "text-red-400"
+                                                    ? "text-green-400"
+                                                    : "text-red-400"
                                                     }`}
                                             >
                                                 {item.type === "credit" ? "+" : "-"}₹{item.amount}
@@ -441,10 +444,10 @@ const Wallet = () => {
 
                                             <span
                                                 className={`inline-block mt-2 px-3 py-1 rounded-full text-xs ${item.status === "success"
-                                                        ? "bg-green-500/20 text-green-400"
-                                                        : item.status === "pending"
-                                                            ? "bg-yellow-500/20 text-yellow-400"
-                                                            : "bg-red-500/20 text-red-400"
+                                                    ? "bg-green-500/20 text-green-400"
+                                                    : item.status === "pending"
+                                                        ? "bg-yellow-500/20 text-yellow-400"
+                                                        : "bg-red-500/20 text-red-400"
                                                     }`}
                                             >
                                                 {item.status}

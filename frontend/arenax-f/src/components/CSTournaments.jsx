@@ -401,21 +401,31 @@ const CSTournament = () => {
                     {/* ===============================
                 BUTTONS
             =============================== */}
-
                     <div className="flex gap-3 mt-7">
 
                       <button
                         onClick={() => navigate(`/detail/${tournament._id}`)}
+                        hidden={tournament.status === "Live" ? true : false}
                         className="flex-1 py-3 rounded-2xl border border-violet-500 text-violet-400 hover:bg-violet-500 hover:text-white transition"
                       >
                         Details
                       </button>
 
-                      <button
-                        className="flex-1 py-3 rounded-2xl bg-linear-to-r from-violet-600 to-fuchsia-600 font-semibold hover:scale-[1.03] transition"
-                      >
-                        Join Now
-                      </button>
+
+                      {tournament.status === "Live" ?
+                        <button
+                          className="flex-1 py-3 rounded-2xl bg-red-600 font-semibold hover:scale-[1.03] transition"
+                        >
+                          On Live
+                        </button>
+                        : <button
+                         onClick={()=>navigate(`/join-tournament/${tournament._id}`)}
+                          className="flex-1 py-3 rounded-2xl bg-linear-to-r from-violet-600 to-fuchsia-600 font-semibold hover:scale-[1.03] transition"
+                        >
+                          Join Now
+                        </button>}
+
+
 
                     </div>
 

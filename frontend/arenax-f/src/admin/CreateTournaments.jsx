@@ -9,6 +9,7 @@ import {
     FaUsers,
 } from "react-icons/fa";
 import api from "../api/api"
+import { showError, showSuccess } from "../utils/toast";
 export default function CreateTournament() {
 
     const [formData, setFormData] = useState({
@@ -39,6 +40,7 @@ export default function CreateTournament() {
 
         try {
             const { data } = await api.post("/api/auth/tournament/create", formData);
+            showSuccess(data.msg)
             if(data.success) {
                 setFormData({
                     title: "",
@@ -55,6 +57,7 @@ export default function CreateTournament() {
             }
         } catch (error) {
             console.error(error);
+            showError(error)
         }
 
     }

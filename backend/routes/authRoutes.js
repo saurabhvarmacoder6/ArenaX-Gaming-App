@@ -16,6 +16,7 @@ import { updateTournament } from "../controllers/tournaments/updateTournamentCon
 import { deleteTournament } from "../controllers/tournaments/deleteTournamentController.js";
 import { getBalance, paymentOrderData, transactionData, totalUsers } from "../controllers/authRouterController.js";
 import { getTournament } from "../controllers/tournaments/getTournamentController.js";
+import { joinTournament } from "../controllers/tournaments/joinTournamentController.js";
 
 const router = express.Router();
 
@@ -32,6 +33,7 @@ router.get("/transaction", verifyToken, transactionData);
 router.get("/tournament/:id", verifyToken, getTournamentById);
 router.put("/tournament/:id", verifyToken, verifyAdmin, updateTournament);
 router.delete("/tournament/:id", verifyToken, verifyAdmin, deleteTournament);
+router.post("/join-tournament/:id", verifyToken, joinTournament);
 router.get("/users", verifyToken, totalUsers);
 router.patch("/user/:id/block", verifyToken, verifyAdmin, blockUser);
 router.patch("/user/:id/unblock", verifyToken, verifyAdmin, unblockUser);

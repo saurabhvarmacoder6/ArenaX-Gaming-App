@@ -5,6 +5,7 @@ import { FaEnvelope, FaKey } from "react-icons/fa";
 import logo from "../img/logo.png";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
+import { showError, showSuccess } from "../utils/toast";
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
@@ -30,6 +31,7 @@ const ForgotPassword = () => {
     const handleSendOtp = async () => {
         try {
             const { data } = await api.post("/api/auth/forgot-password", { email });
+            showSuccess(data.msg)
             if (data.success) {
                 setIsOtpSent(true);
                 setTimer(300);
@@ -38,6 +40,7 @@ const ForgotPassword = () => {
             }
         } catch (error) {
             console.error("Error sending OTP:", error);
+            showError(error)
         }
     };
 
