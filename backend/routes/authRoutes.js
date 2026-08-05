@@ -14,6 +14,7 @@ import { createTournament } from "../controllers/tournaments/createTournamentCon
 import { getTournamentById } from "../controllers/tournaments/getTournamentByIdController.js";
 import { updateTournament } from "../controllers/tournaments/updateTournamentController.js";
 import { deleteTournament } from "../controllers/tournaments/deleteTournamentController.js";
+import { getOccupiedSlots } from "../controllers/tournaments/occupiedController.js";
 import { getBalance, paymentOrderData, transactionData, totalUsers } from "../controllers/authRouterController.js";
 import { getTournament } from "../controllers/tournaments/getTournamentController.js";
 import { joinTournament } from "../controllers/tournaments/joinTournamentController.js";
@@ -39,5 +40,6 @@ router.patch("/user/:id/block", verifyToken, verifyAdmin, blockUser);
 router.patch("/user/:id/unblock", verifyToken, verifyAdmin, unblockUser);
 router.post("/tournament/create", verifyToken, verifyAdmin, createTournament);
 router.get("/tournaments", verifyToken, getTournament);
+router.get("/tournament/:id/occupied-slots", verifyToken, getOccupiedSlots);
 
 export default router; 

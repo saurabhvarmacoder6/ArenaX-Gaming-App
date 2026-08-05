@@ -15,7 +15,7 @@ const Splash = () => {
   }, [navigate]);
 
   return (
-    <div className="relative flex h-screen items-center justify-center overflow-hidden bg-[#09090B]">
+    <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-[#09090B]">
 
       {/* Glow */}
       <div className="absolute h-72 w-72 rounded-full bg-violet-600/20 blur-3xl"></div>

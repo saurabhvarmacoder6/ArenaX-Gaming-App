@@ -14,9 +14,12 @@ export default function JoinTournament() {
 
     const [walletBalance, setWalletBalance] = useState()
 
+    const [occupiedSlots, setOccupiedSlots] = useState([])
+
     useEffect(() => {
         fetchTournament();
-        getBalance()
+        getBalance();
+        handleOccupiedSlots();
     }, []);
 
     async function fetchTournament() {
@@ -44,12 +47,24 @@ export default function JoinTournament() {
             const { data } = await api.post(`/api/auth/join-tournament/${id}`, {
                 slot: selectedSlot,
             })
-             showSuccess(data.msg)
+            showSuccess(data.msg)
 
         } catch (error) {
             console.error(error);
             showError(error)
 
+        }
+
+    }
+
+    async function handleOccupiedSlots() {
+        try {
+            const { data } = await api.get(
+                `/api/auth/tournament/${id}/occupied-slots`
+            );
+            setOccupiedSlots(data.occupiedSlots);
+        } catch (error) {
+            console.error(error);
         }
 
     }
@@ -97,12 +112,13 @@ export default function JoinTournament() {
 
                             const slot = index + 1;
                             const selected = selectedSlot === slot;
-
+                            const isOccupied = occupiedSlots.includes(slot);
                             return (
 
                                 <button
                                     key={slot}
                                     onClick={() => setSelectedSlot(slot)}
+                                    disabled={isOccupied}
                                     className="flex items-center gap-3"
                                 >
 
@@ -111,14 +127,15 @@ export default function JoinTournament() {
                                     </span>
 
                                     <div
-                                        className={`
-          w-7 h-7 rounded-md border-2 transition-all
+                                        className={`w-7 h-7 rounded-md border-2 transition-all
 
-          ${selected
+                                         ${selected
                                                 ? "bg-orange-600 border-orange-600"
                                                 : "border-orange-500"
                                             }
-        `}
+                                             ${isOccupied ? "bg-orange-500" : "bg-[#1A1A24]"
+                                            }
+                                         `}
                                     />
 
                                 </button>
@@ -188,6 +205,7 @@ export default function JoinTournament() {
                                         const slot = teamIndex * teamSize + playerIndex + 1;
 
                                         const selected = selectedSlot === slot;
+                                        const isOccupied = occupiedSlots.includes(slot);
 
                                         return (
 
@@ -198,12 +216,16 @@ export default function JoinTournament() {
 
                                                 <button
                                                     onClick={() => setSelectedSlot(slot)}
+                                                    disabled={isOccupied}
+
                                                     className={`
                 w-6 h-6 rounded-md border-2 transition-all
 
                 ${selected
                                                             ? "bg-orange-600 border-orange-600"
                                                             : "border-orange-500"
+                                                        }
+                                                         ${isOccupied ? "bg-orange-500" : "bg-[#1A1A24]"
                                                         }
                 `}
                                                 />
