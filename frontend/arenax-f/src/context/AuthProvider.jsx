@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import api from "../api/api";
+import { showError, showSuccess } from "../utils/toast";
 
 export const AuthProvider = ({ children }) => {
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     const getCurrentUser = async () => {
     try {
         const { data } = await api.get("/api/auth/me");
-
+        showSuccess(data.msg)
         if (data.success) {
             setUser(data.user);
         } else {
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children }) => {
         }
 
     } catch (error) {
+        showError(error)
         console.log(error);
         setUser(null);
     } finally {

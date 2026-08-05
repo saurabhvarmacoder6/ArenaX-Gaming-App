@@ -19,6 +19,7 @@ import { getBalance, paymentOrderData, transactionData, totalUsers } from "../co
 import { getTournament } from "../controllers/tournaments/getTournamentController.js";
 import { joinTournament } from "../controllers/tournaments/joinTournamentController.js";
 import { getMyMatches } from "../controllers/tournaments/myMatchesController.js";
+import { getJoinedPlayers } from "../controllers/tournaments/getJoinedPlayers.js";
 
 const router = express.Router();
 
@@ -42,6 +43,7 @@ router.patch("/user/:id/unblock", verifyToken, verifyAdmin, unblockUser);
 router.post("/tournament/create", verifyToken, verifyAdmin, createTournament);
 router.get("/tournaments", verifyToken, getTournament);
 router.get("/tournament/:id/occupied-slots", verifyToken, getOccupiedSlots);
+router.get("/tournament/:id/joined-players", verifyToken, getJoinedPlayers);
 router.get("/my-matches", verifyToken, getMyMatches);
 
 export default router; 

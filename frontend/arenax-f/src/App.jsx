@@ -29,6 +29,7 @@ import UpdateTournament from './admin/updateTournaments'
 import JoinTournament from './components/JoinTournament'
 import MyMatches from './bottompages/MyMatches';
 import MyTournamentDetails from './components/MyTournamentDetails';
+import JoinedPlayersName from './components/joinedPlayersName';
 function App() {
 
   const location = useLocation();
@@ -71,6 +72,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/order-data" element={<PaymentOrderData />} />
           <Route path="/join-tournament/:id" element={<JoinTournament />} />
+          <Route path="/join-player-name/:id" element={<JoinedPlayersName />} />
           <Route path="/mymatches" element={<MyMatches />} />
           <Route path="/withdraw" element={<Withdraw />} />
         </Route>

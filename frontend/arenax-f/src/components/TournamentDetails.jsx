@@ -158,11 +158,7 @@ const TournamentDetails = () => {
                         </div>
                     </div>
 
-                    <button className="px-6 py-2 w-full text-lg font-bold rounded-full bg-green-400 text-black">
-
-                        Joined Players
-
-                    </button>
+                    
 
                     {/* ================= GRID ================= */}
 
@@ -345,56 +341,6 @@ const TournamentDetails = () => {
                     </div>
 
                 </motion.div>
-                {/* ================= ROOM DETAILS ================= */}
-
-                {/* <motion.div
-                    initial={{ opacity: 0, y: 25 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: .3 }}
-                    className="mt-8"
-                >
-
-                    <div className="rounded-3xl overflow-hidden border border-white/10 bg-[#171722]">
-
-                        <div className="grid grid-cols-2">
-
-                            <div className="p-6 border-r border-white/10 text-center">
-
-                                <p className="text-gray-400 text-sm">
-                                    Room ID
-                                </p>
-
-                                <h2 className="text-lg font-bold mt-3 text-violet-400">
-
-                                    {tournamentDetail.status === "Live"
-                                        ? tournamentDetail.roomId || "Not Available"
-                                        : "Hidden"}
-
-                                </h2>
-
-                            </div>
-
-                            <div className="p-6 text-center">
-
-                                <p className="text-gray-400 text-sm">
-                                    Password
-                                </p>
-
-                                <h2 className="text-lg font-bold mt-3 text-violet-400">
-
-                                    {tournamentDetail.status === "Live"
-                                        ? tournamentDetail.roomPassword || "Not Available"
-                                        : "Hidden"}
-
-                                </h2>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </motion.div> */}
 
                 {/* ================= RULES ================= */}
 

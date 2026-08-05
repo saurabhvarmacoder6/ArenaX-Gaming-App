@@ -158,7 +158,9 @@ const MyTournamentDetails = () => {
                         </div>
                     </div>
 
-                    <button className="px-6 py-2 w-full text-lg font-bold rounded-full bg-green-400 text-black">
+                    <button
+                        onClick={() => navigate(`/join-player-name/${tournamentDetail._id}`)}
+                        className="px-6 py-2 w-full text-lg font-bold bg-green-400 text-black">
 
                         Joined Players
 
