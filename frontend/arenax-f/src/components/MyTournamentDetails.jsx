@@ -26,7 +26,7 @@ import {
 } from "react-icons/fa";
 import api from "../api/api";
 
-const TournamentDetails = () => {
+const MyTournamentDetails = () => {
     const { id } = useParams()
 
     const navigate = useNavigate();
@@ -347,7 +347,7 @@ const TournamentDetails = () => {
                 </motion.div>
                 {/* ================= ROOM DETAILS ================= */}
 
-                {/* <motion.div
+                <motion.div
                     initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: .3 }}
@@ -394,7 +394,7 @@ const TournamentDetails = () => {
 
                     </div>
 
-                </motion.div> */}
+                </motion.div>
 
                 {/* ================= RULES ================= */}
 
@@ -500,4 +500,4 @@ const TournamentDetails = () => {
     );
 };
 
-export default TournamentDetails;
+export default MyTournamentDetails;

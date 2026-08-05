@@ -4,7 +4,7 @@ const joinedPlayerSchema = new mongoose.Schema(
     {
         tournament: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Tournament",
+            ref: "tournaments",
             required: true,
         },
 

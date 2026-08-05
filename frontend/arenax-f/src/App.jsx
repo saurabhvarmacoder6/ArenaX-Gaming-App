@@ -27,6 +27,8 @@ import CreateTournaments from './admin/CreateTournaments'
 import NewPassword from './components/NewPassword'
 import UpdateTournament from './admin/updateTournaments'
 import JoinTournament from './components/JoinTournament'
+import MyMatches from './bottompages/MyMatches';
+import MyTournamentDetails from './components/MyTournamentDetails';
 function App() {
 
   const location = useLocation();
@@ -64,10 +66,12 @@ function App() {
           <Route path="/cs" element={<CSTournaments />} />
           <Route path="/lw" element={<LWTournaments />} />
           <Route path="/detail/:id" element={<TournamentDetails />} />
+          <Route path="/mydetail/:id" element={<MyTournamentDetails />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/order-data" element={<PaymentOrderData />} />
           <Route path="/join-tournament/:id" element={<JoinTournament />} />
+          <Route path="/mymatches" element={<MyMatches />} />
           <Route path="/withdraw" element={<Withdraw />} />
         </Route>
 

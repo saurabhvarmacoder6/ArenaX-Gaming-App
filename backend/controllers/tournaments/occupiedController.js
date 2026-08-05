@@ -7,13 +7,17 @@ export const getOccupiedSlots = async (req, res) => {
 
         const occupiedSlots = await JoinedPlayer.find({
             tournament: id,
-            user: req.user.userId,
         }).select("slot -_id");
+
+        const alreadyJoined = await JoinedPlayer.findOne({
+            tournament: id,
+            user: req.user.userId,
+        });
 
         return res.status(200).json({
             success: true,
             occupiedSlots: occupiedSlots.map(item => item.slot),
-
+            alreadyJoined: !!alreadyJoined,
         });
 
     } catch (error) {

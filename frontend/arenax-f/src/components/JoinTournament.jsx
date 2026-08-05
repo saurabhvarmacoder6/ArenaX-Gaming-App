@@ -16,6 +16,8 @@ export default function JoinTournament() {
 
     const [occupiedSlots, setOccupiedSlots] = useState([])
 
+    const [isJoined, setIsJoined] = useState(false)
+
     useEffect(() => {
         fetchTournament();
         getBalance();
@@ -63,6 +65,9 @@ export default function JoinTournament() {
                 `/api/auth/tournament/${id}/occupied-slots`
             );
             setOccupiedSlots(data.occupiedSlots);
+            if (data.alreadyJoined) {
+                setIsJoined(true)
+            }
         } catch (error) {
             console.error(error);
         }
@@ -337,11 +342,19 @@ export default function JoinTournament() {
 
                 <div className="p-5 pt-0">
 
-                    <button
+                    {
+                        isJoined ? <button
 
-                        onClick={() => handleTournament(tournamentDetail._id)}
-                        disabled={!selectedSlot}
-                        className={`
+                            disabled={true}
+                            className="text-white bg-linear-to-r from-indigo-600 to-violet-600 text-lg font-bold w-full py-4 rounded-2xl"
+                        >
+                            Already Joined
+                        </button> :
+                            <button
+
+                                onClick={() => handleTournament(tournamentDetail._id)}
+                                disabled={!selectedSlot}
+                                className={`
       w-full
       py-4
       rounded-2xl
@@ -351,13 +364,14 @@ export default function JoinTournament() {
       duration-300
 
       ${selectedSlot
-                                ? "bg-linear-to-r from-violet-600 to-fuchsia-600 text-white hover:scale-[1.02]"
-                                : "bg-white/10 text-gray-500 cursor-not-allowed"
-                            }
+                                        ? "bg-linear-to-r from-violet-600 to-fuchsia-600 text-white hover:scale-[1.02]"
+                                        : "bg-white/10 text-gray-500 cursor-not-allowed"
+                                    }
       `}
-                    >
-                        {selectedSlot ? `Join Slot ${selectedSlot}` : "Select Any Slot"}
-                    </button>
+                            >
+                                {selectedSlot ? `Join Slot ${selectedSlot}` : "Select Any Slot"}
+                            </button>
+                    }
 
                 </div>
 

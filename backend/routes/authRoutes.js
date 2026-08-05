@@ -18,6 +18,7 @@ import { getOccupiedSlots } from "../controllers/tournaments/occupiedController.
 import { getBalance, paymentOrderData, transactionData, totalUsers } from "../controllers/authRouterController.js";
 import { getTournament } from "../controllers/tournaments/getTournamentController.js";
 import { joinTournament } from "../controllers/tournaments/joinTournamentController.js";
+import { getMyMatches } from "../controllers/tournaments/myMatchesController.js";
 
 const router = express.Router();
 
@@ -41,5 +42,6 @@ router.patch("/user/:id/unblock", verifyToken, verifyAdmin, unblockUser);
 router.post("/tournament/create", verifyToken, verifyAdmin, createTournament);
 router.get("/tournaments", verifyToken, getTournament);
 router.get("/tournament/:id/occupied-slots", verifyToken, getOccupiedSlots);
+router.get("/my-matches", verifyToken, getMyMatches);
 
 export default router; 
