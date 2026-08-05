@@ -132,7 +132,7 @@ export default function JoinTournament() {
                                     </span>
 
                                     <div
-                                        className={`w-7 h-7 rounded-md border-2 transition-all
+                                        className={`size-4 rounded-md border-2 transition-all
 
                                          ${selected
                                                 ? "bg-orange-600 border-orange-600"
@@ -224,7 +224,7 @@ export default function JoinTournament() {
                                                     disabled={isOccupied}
 
                                                     className={`
-                w-6 h-6 rounded-md border-2 transition-all
+                size-4 rounded-md border-2 transition-all
 
                 ${selected
                                                             ? "bg-orange-600 border-orange-600"

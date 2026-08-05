@@ -16,6 +16,8 @@ export default function WithdrawRequest() {
     const [requests, setRequests] = useState([]);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("all");
+    const [rejectId, setRejectId] = useState(null);
+    const [adminNote, setAdminNote] = useState("");
 
 
     useMemo(() => {
@@ -25,7 +27,7 @@ export default function WithdrawRequest() {
 
     async function handleWithdrawData() {
         try {
-            const { data } = await api.get("/api/payment/getWithdrawData")
+            const { data } = await api.get("/api/payment/admin/withdraw")
             setRequests(data.data)
         } catch (error) {
             console.error(error);
@@ -33,16 +35,34 @@ export default function WithdrawRequest() {
     }
 
     async function handleRejectWithdraw(id, adminNote) {
+
+        if (!adminNote.trim()) {
+            return alert("Please enter rejection reason.");
+        }
+
         try {
-            const { data } = await api.patch(`/api/payment/withdraw/${id}/reject`, { adminNote });
-            setRequests((prevRequests) =>
-                prevRequests.map((request) =>
-                    request._id === id ? { ...request, status: "rejected" } : request
+
+            await api.patch(
+                `/api/payment/withdraw/${id}/reject`,
+                { adminNote }
+            );
+
+            setRequests((prev) =>
+                prev.map((item) =>
+                    item._id === id
+                        ? {
+                            ...item,
+                            status: "rejected",
+                            adminNote,
+                        }
+                        : item
                 )
             );
+
         } catch (error) {
             console.error(error);
         }
+
     }
 
     async function handleMarkPaid(id) {
@@ -225,14 +245,53 @@ export default function WithdrawRequest() {
                                     </button>
 
                                     <button
-                                        onClick={() => handleRejectWithdraw(item._id, "Admin rejected the request.")}
+                                        onClick={() => setRejectId(item._id)}
                                         className="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium flex items-center justify-center gap-2"
                                     >
                                         <FaTimesCircle />
-
                                         Reject
-
                                     </button>
+
+                                </div>
+
+                            )}
+
+                            {rejectId === item._id && (
+
+                                <div className="mt-5 space-y-3">
+
+                                    <textarea
+                                        rows={3}
+                                        value={adminNote}
+                                        onChange={(e) => setAdminNote(e.target.value)}
+                                        placeholder="Write rejection reason..."
+                                        className="w-full rounded-xl border border-gray-200 p-3 outline-none focus:border-red-500 resize-none"
+                                    />
+
+                                    <div className="flex gap-3">
+
+                                        <button
+                                            onClick={() => {
+                                                handleRejectWithdraw(item._id, adminNote);
+                                                setRejectId(null);
+                                                setAdminNote("");
+                                            }}
+                                            className="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium"
+                                        >
+                                            Confirm Reject
+                                        </button>
+
+                                        <button
+                                            onClick={() => {
+                                                setRejectId(null);
+                                                setAdminNote("");
+                                            }}
+                                            className="flex-1 py-3 rounded-xl border border-gray-300"
+                                        >
+                                            Cancel
+                                        </button>
+
+                                    </div>
 
                                 </div>
 

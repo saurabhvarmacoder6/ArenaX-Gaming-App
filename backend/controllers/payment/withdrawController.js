@@ -95,3 +95,27 @@ export const getWithdrawData = async (req, res) => {
         });
     }
 };
+
+export const getAllWithdrawRequests = async (req, res) => {
+    try {
+
+        const result = await Withdrawal.find()
+            .populate("userId", "name email")
+            .sort({ createdAt: -1 });
+
+        return res.status(200).json({
+            success: true,
+            data: result,
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            msg: "Internal Server Error",
+        });
+
+    }
+};
