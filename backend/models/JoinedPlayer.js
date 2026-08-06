@@ -14,6 +14,12 @@ const joinedPlayerSchema = new mongoose.Schema(
             required: true,
         },
 
+        kill:{
+            type:Number,
+            required:true,
+            default:0,
+        },
+
         slot: {
             type: Number,
             required: true,

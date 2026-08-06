@@ -20,6 +20,7 @@ import { getTournament } from "../controllers/tournaments/getTournamentControlle
 import { joinTournament } from "../controllers/tournaments/joinTournamentController.js";
 import { getMyMatches } from "../controllers/tournaments/myMatchesController.js";
 import { getJoinedPlayers } from "../controllers/tournaments/getJoinedPlayers.js";
+import { updatePlayerKills } from "../controllers/tournaments/updateKillsController.js";
 
 const router = express.Router();
 
@@ -41,6 +42,7 @@ router.get("/users", verifyToken, totalUsers);
 router.patch("/user/:id/block", verifyToken, verifyAdmin, blockUser);
 router.patch("/user/:id/unblock", verifyToken, verifyAdmin, unblockUser);
 router.post("/tournament/create", verifyToken, verifyAdmin, createTournament);
+router.patch("/player/kills", verifyToken, verifyAdmin, updatePlayerKills);
 router.get("/tournaments", verifyToken, getTournament);
 router.get("/tournament/:id/occupied-slots", verifyToken, getOccupiedSlots);
 router.get("/tournament/:id/joined-players", verifyToken, getJoinedPlayers);

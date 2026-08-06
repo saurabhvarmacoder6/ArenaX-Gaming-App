@@ -166,6 +166,14 @@ const MyTournamentDetails = () => {
 
                     </button>
 
+                    <button
+                        onClick={() => navigate(`/match-history/${tournamentDetail._id}`)}
+                        className="px-6 py-2 w-full text-lg font-bold bg-green-400 text-black">
+
+                        Match History
+
+                    </button>
+
                     {/* ================= GRID ================= */}
 
                     <div className="grid grid-cols-2">

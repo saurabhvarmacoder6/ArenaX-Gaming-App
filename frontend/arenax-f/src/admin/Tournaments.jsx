@@ -361,7 +361,9 @@ export default function Tournaments() {
 
                 </button>
 
-                <button className="flex-1 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 flex items-center justify-center gap-2">
+                <button
+                onClick={()=>navigate(`/admin/see-players/${item._id}`)}
+                className="flex-1 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 flex items-center justify-center gap-2">
 
                   <FaEye />
 
