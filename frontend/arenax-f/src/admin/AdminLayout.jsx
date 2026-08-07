@@ -9,6 +9,7 @@ import {
     FaUsers,
     FaSignOutAlt,
     FaSignInAlt,
+    FaBell
 } from "react-icons/fa";
 
 const navItems = [
@@ -36,6 +37,11 @@ const navItems = [
         name: "Users",
         path: "/admin/users",
         icon: <FaUsers />,
+    },
+    {
+        name: "Notification",
+        path: "/admin/notification",
+        icon: <FaBell />,
     },
 ];
 

@@ -401,31 +401,44 @@ const CSTournament = () => {
                     {/* ===============================
                 BUTTONS
             =============================== */}
-                    <div className="flex gap-3 mt-7">
+                    <div className="flex gap-3 mt-6">
 
-                      <button
-                        onClick={() => navigate(`/detail/${tournament._id}`)}
-                        hidden={tournament.status === "Live" ? true : false}
-                        className="flex-1 py-3 rounded-2xl border border-violet-500 text-violet-400 hover:bg-violet-500 hover:text-white transition"
-                      >
-                        Details
-                      </button>
+                      {tournament.status === "Completed" ? (
 
-
-                      {tournament.status === "Live" ?
                         <button
-                          className="flex-1 py-3 rounded-2xl bg-red-600 font-semibold hover:scale-[1.03] transition"
+                          onClick={() => navigate(`/match-history/${tournament._id}`)}
+                          className="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition"
                         >
-                          On Live
+                          View History
                         </button>
-                        : <button
-                         onClick={()=>navigate(`/join-tournament/${tournament._id}`)}
-                          className="flex-1 py-3 rounded-2xl bg-linear-to-r from-violet-600 to-fuchsia-600 font-semibold hover:scale-[1.03] transition"
+
+                      ) : tournament.status === "Live" ? (
+
+                        <button
+                          className="w-full py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold transition"
                         >
-                          Join Now
-                        </button>}
+                           On Live
+                        </button>
 
+                      ) : (
 
+                        <>
+                          <button
+                            onClick={() => navigate(`/detail/${tournament._id}`)}
+                            className="flex-1 py-3 rounded-2xl border border-violet-500 text-violet-400 hover:bg-violet-500 hover:text-white transition"
+                          >
+                            Details
+                          </button>
+
+                          <button
+                            onClick={() => navigate(`/join-tournament/${tournament._id}`)}
+                            className="flex-1 py-3 rounded-2xl bg-linear-to-r from-violet-600 to-fuchsia-600 text-white font-semibold hover:scale-[1.03] transition"
+                          >
+                            Join Now
+                          </button>
+                        </>
+
+                      )}
 
                     </div>
 

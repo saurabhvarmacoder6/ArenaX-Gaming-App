@@ -21,6 +21,9 @@ import { joinTournament } from "../controllers/tournaments/joinTournamentControl
 import { getMyMatches } from "../controllers/tournaments/myMatchesController.js";
 import { getJoinedPlayers } from "../controllers/tournaments/getJoinedPlayers.js";
 import { updatePlayerKills } from "../controllers/tournaments/updateKillsController.js";
+import { createNotification } from "../controllers/notifications/createNotificationController.js";
+import { getNotifications } from "../controllers/notifications/getNotificationController.js";
+import { deleteNotification } from "../controllers/notifications/deleteNotificationController.js";
 
 const router = express.Router();
 
@@ -47,5 +50,8 @@ router.get("/tournaments", verifyToken, getTournament);
 router.get("/tournament/:id/occupied-slots", verifyToken, getOccupiedSlots);
 router.get("/tournament/:id/joined-players", verifyToken, getJoinedPlayers);
 router.get("/my-matches", verifyToken, getMyMatches);
+router.post("/notification", verifyToken, verifyAdmin, createNotification);
+router.get("/get-notifications", verifyToken, getNotifications);
+router.delete("/notification/:id",verifyToken,verifyAdmin,deleteNotification);
 
 export default router; 

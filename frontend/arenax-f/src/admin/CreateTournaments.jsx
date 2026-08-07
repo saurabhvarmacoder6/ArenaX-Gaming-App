@@ -25,6 +25,8 @@ export default function CreateTournament() {
         matchTime: "",
     });
 
+    const [disable, setDisable] = useState(false)
+
     function handleChange(e) {
 
         setFormData({
@@ -40,21 +42,14 @@ export default function CreateTournament() {
 
         try {
             const { data } = await api.post("/api/auth/tournament/create", formData);
-            showSuccess(data.msg)
-            if(data.success) {
-                setFormData({
-                    title: "",
-                    mode: "",
-                    type: "",
-                    entryFee: "",
-                    perKill: "",
-                    prizePool: "",
-                    totalSlots: "",
-                    map: "",
-                    matchDate: "",
-                    matchTime: "",
-                });
+            showSuccess(data.msg);
+            if (data.success) {
+                setDisable(true)
+                setTimeout(() => {
+                    setDisable(false)
+                }, 3000)
             }
+
         } catch (error) {
             console.error(error);
             showError(error)
@@ -184,9 +179,14 @@ export default function CreateTournament() {
                 {/* Button */}
 
                 <button
-                    className="w-full py-4 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-lg"
+                    disabled={disable}
+                    className={`w-full rounded-xl py-3 text-white font-semibold transition
+    ${disable
+                            ? "bg-gray-500 cursor-not-allowed"
+                            : "bg-violet-600 hover:bg-violet-500"
+                        }`}
                 >
-                    Create Tournament
+                    {disable ? "Tournament Created" : "Create Tournament"}
                 </button>
 
             </motion.form>

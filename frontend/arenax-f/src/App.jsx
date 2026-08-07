@@ -32,14 +32,14 @@ import MyTournamentDetails from './components/MyTournamentDetails';
 import JoinedPlayersName from './components/joinedPlayersName';
 import MatchHistory from './components/MatchHistory';
 import SeePlayers from './admin/SeePlayers';
+import ShowNotification from './components/ShowNotification';
+import CreateNotification from './admin/CreateNotification';
+import Notification from './admin/Notification';
 function App() {
 
   const location = useLocation();
-  const hideBottomNav = ["/", "/signup", "/login", "/forgot-password", "/new-password",
-    "/admin", "/admin/withdraw", "/admin/payment-orders", "/admin/users", "/admin/tournaments",
-    "/admin/create-tournaments"].includes(location.pathname) ||
-    location.pathname.startsWith("/admin/update-tournaments/")||
-     location.pathname.startsWith("/admin/see-players/");
+  const hideBottomNav = ["/", "/signup", "/login", "/forgot-password", "/new-password","/admin"].includes(location.pathname) ||
+    location.pathname.startsWith("/admin/")
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#09090B]">
       <Toaster
@@ -79,6 +79,7 @@ function App() {
           <Route path="/match-history/:id" element={<MatchHistory />} />
           <Route path="/mymatches" element={<MyMatches />} />
           <Route path="/withdraw" element={<Withdraw />} />
+          <Route path="/show-notification" element={<ShowNotification />} />
         </Route>
 
         <Route element={<AdminRoutes />}>
@@ -89,8 +90,11 @@ function App() {
             <Route path="users" element={<Users />} />
             <Route path="tournaments" element={<Tournaments />} />
             <Route path="create-tournaments" element={<CreateTournaments />} />
+            <Route path="create-notification" element={<CreateNotification />} />
             <Route path="update-tournaments/:id" element={<UpdateTournament />} />
             <Route path="see-players/:id" element={<SeePlayers />} />
+            <Route path="see-players/:id" element={<SeePlayers />} />
+            <Route path="notification" element={<Notification />} />
           </Route>
         </Route>
 
