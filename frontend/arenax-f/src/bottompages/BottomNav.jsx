@@ -54,7 +54,7 @@ function BottomNav() {
                 className="flex flex-col items-center gap-1 py-2"
               >
 
-                <div className="relative flex items-center justify-center w-12 h-12">
+                <div className="relative flex items-center justify-center size-8">
 
                   {active && (
 
@@ -71,7 +71,7 @@ function BottomNav() {
                   )}
 
                   <span
-                    className={`relative z-10 text-lg transition-all duration-300 ${
+                    className={`relative z-10 text-sm transition-all duration-300 ${
                       active
                         ? "text-white scale-110"
                         : "text-gray-400 group-hover:text-violet-400"

@@ -2,14 +2,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import brsolo from "../img/brsolo.png";
-import brduo from "../img/brduo.png";
 import {
   FaArrowLeft,
   FaSearch,
   FaFire,
+  FaCalendar,
+  FaUser,
+  FaClock
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
+import { FaFaceFrown, FaPerson } from "react-icons/fa6";
 
 // ===============================
 // BR TOURNAMENT PAGE
@@ -58,21 +61,21 @@ const BRTournament = () => {
 
   return (
 
-    <div className="min-h-screen bg-[#09090F] text-white pb-40">
+    <div className="min-h-screen bg-[#09090F] w-full text-white pb-40">
 
       {/* ===============================
           TOP HEADER
       =============================== */}
 
-      <div className="sticky top-0 z-50 backdrop-blur-xl bg-[#09090F]/90 border-b border-white/10">
+      <div className="sticky top-0 z-50 backdrop-blur-xl shadow-sm shadow-purple-600 bg-[#09090F]/90 border-b border-white/10">
 
         <div className="px-5 pt-5 pb-4">
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center w-full justify-between">
 
             <button
               onClick={() => navigate(-1)}
-              className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-violet-600 transition"
+              className="w-11 h-11 rounded-full  flex items-center justify-center hover:bg-violet-600 transition"
             >
               <FaArrowLeft />
             </button>
@@ -89,7 +92,9 @@ const BRTournament = () => {
 
             </div>
 
-            <div className="w-11" />
+            <div>
+              <FaFire className="text-purple-500 text-xl" />
+            </div>
 
           </div>
 
@@ -101,35 +106,11 @@ const BRTournament = () => {
           PAGE CONTENT
       =============================== */}
 
-      <div className="px-5 pt-6">
+      <div className="px-5">
 
         {/* Heading */}
 
-        <motion.div
 
-          initial={{ opacity: 0, y: 20 }}
-
-          animate={{ opacity: 1, y: 0 }}
-
-          transition={{ duration: .5 }}
-
-        >
-
-          <div className="flex items-center gap-2">
-
-            <FaFire className="text-orange-500 text-xl" />
-
-            <h2 className="text-3xl font-bold">
-              Find Your Match
-            </h2>
-
-          </div>
-
-          <p className="text-gray-400 font-semibold mt-2">
-            Compete with the best players and win exciting rewards.
-          </p>
-
-        </motion.div>
 
 
         <motion.div
@@ -153,32 +134,43 @@ const BRTournament = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: .25 }}
-          className="flex gap-3 mt-7 overflow-x-auto scrollbar-hide"
+          transition={{ delay: 0.25 }}
+          className="
+    mt-7
+    p-1
+    rounded-2xl
+    bg-[#171722]
+    border border-white/10
+    shadow-[0_10px_30px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.05)]
+    grid grid-cols-3
+    gap-1
+  "
         >
-
           {["Live", "Upcoming", "Completed"].map((item) => (
-
             <button
               key={item}
               onClick={() => setSelectedStatus(item)}
-              className={`px-5 py-3 text-sm rounded-full whitespace-nowrap font-semibold transition-all duration-300
+              className={`
+        py-3
+        rounded-xl
+        text-sm
+        font-semibold
+        transition-all
+        duration-300
 
-      ${selectedStatus === item
+        ${selectedStatus === item
                   ? item === "Live"
-                    ? "bg-red-600 shadow-lg shadow-red-600/30"
+                    ? "border border-red-500 text-white shadow-lg shadow-red-500/30"
                     : item === "Upcoming"
-                      ? "bg-emerald-600 shadow-lg shadow-emerald-600/30"
-                      : "bg-gray-600 shadow-lg shadow-gray-600/30"
-                  : "bg-[#171722] border border-white/10 hover:border-violet-500"
+                      ? "border border-violet-600 text-white shadow-lg shadow-violet-500/30"
+                      : "border border-slate-500 text-white shadow-lg shadow-slate-500/30"
+                  : "hover:text-gray-400 text-white"
                 }
       `}
             >
               {item}
             </button>
-
           ))}
-
         </motion.div>
 
         {/* ===============================
@@ -201,10 +193,10 @@ const BRTournament = () => {
             <button
               key={item}
               onClick={() => setSelectedFilter(item)}
-              className={`px-6 py-3 rounded-full transition
+              className={`px-10 py-2 font-semibold text-sm rounded-full transition
 
       ${selectedFilter === item
-                  ? "bg-violet-600"
+                  ? " border border-purple-600"
                   : "bg-[#171722] border border-white/10"
                 }
     `}
@@ -216,14 +208,10 @@ const BRTournament = () => {
         </motion.div>
 
         {/* ===============================
-            TOURNAMENT CARDS
-            PART - 2 START HERE
-        =============================== */}
-        {/* ===============================
     TOURNAMENT CARDS
 =============================== */}
 
-        <div className="mt-8 space-y-6">
+        <div className="mt-8 space-y-6 border border-purple-600 rounded-xl">
 
           {filteredTournament.length > 0 ? (
 
@@ -245,7 +233,7 @@ const BRTournament = () => {
                   whileHover={{
                     scale: 1.015,
                   }}
-                  className="rounded-3xl overflow-hidden border border-white/10 bg-[#171722]"
+                  className="rounded-xl overflow-hidden border border-white/10 bg-[#171722]"
                 >
 
                   {/* ===============================
@@ -254,17 +242,47 @@ const BRTournament = () => {
 
                   <div className="relative h-44 ">
                     <img
-                      src={tournament.type === "Solo" ? brsolo : brduo}
+                      src={brsolo}
                       alt={tournament.title}
                       className="h-full w-full object-cover"
                     />
-                    {/* Status */}
+
+                    <div className="
+absolute
+inset-0
+bg-linear-to-r
+from-black
+via-black/65
+to-transparent
+"/>
+                    <div className="
+absolute
+inset-0
+bg-linear-to-t
+from-black
+via-transparent
+to-transparent
+"/>
 
                     <div
-                      className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold
+                      className="
+absolute
+left-0
+top-0
+
+w-60
+h-full
+
+bg-violet-500/15
+blur-[90px]
+"
+                    />
+                    {/* Status */}
+                    <div
+                      className={`absolute top-4 px-3 py-1 rounded-r-full text-xs font-bold
 
   ${tournament.status === "Upcoming"
-                          ? "bg-emerald-500"
+                          ? "bg-purple-600"
                           : tournament.status === "Live"
                             ? "bg-red-500"
                             : "bg-gray-500"
@@ -275,97 +293,77 @@ const BRTournament = () => {
                       {tournament.status}
                     </div>
 
+                    <div className="absolute top-16 left-4 right-4">
+                      <h2 className="text-2xl font-bold text-gray-200">
+                        {tournament.title}
+                      </h2>
+
+                      <p className="text-gray-400 text-sm font-semibold">
+                        {tournament.map} Map
+                      </p>
+
+                      <h1 className="text-lg font-mono font-bold text-yellow-400">
+                        per kill : ₹ {tournament.perKill}
+                      </h1>
+                      <div className="flex gap-2 mt-3">
+
+                        <span className="text-gray-300 font-semibold">
+                          Entry
+                        </span>
+
+                        <span className="
+        px-2
+        rounded-md
+        bg-gray-600/20
+        text-gray-300
+        font-bold
+    ">
+                          ₹{tournament.entryFee}
+                        </span>
+
+                      </div>
+
+                    </div>
+
                   </div>
 
                   {/* ===============================
               CARD CONTENT
           =============================== */}
+                  <div className="py-4 px-3 bg-[#000000]"></div>
+                  <div
+                    className="
+px-4
+py-4
 
-                  <div className="p-5">
+bg-linear-to-b
 
-                    {/* Tournament Name */}
+from-[#111111]
 
-                    <h2 className="text-2xl font-bold">
-                      {tournament.title}
-                    </h2>
-
-                    <p className="text-gray-400 font-semibold mt-1">
-                      Join and dominate the battlefield.
-                    </p>
-
-                    <h1 className="text-lg font-bold text-yellow-400">
-                      per kill : {tournament.perKill} ₹
-                    </h1>
-
-
-                    {/* Info Chips */}
-
-                    <div className="grid grid-cols-2 font-semibold gap-3 mt-6">
-
-                      <div className="bg-white/5 rounded-2xl p-4">
-
-                        <p className="text-gray-400 text-sm">
-                          Entry Fee
-                        </p>
-
-                        <h3 className="text-xl font-bold mt-1">
-                          ₹{tournament.entryFee}
-                        </h3>
-
-                      </div>
-
-                      <div className="bg-white/5 rounded-2xl p-4">
-
-                        <p className="text-gray-400 text-sm">
-                          Prize Pool
-                        </p>
-
-                        <h3 className="text-xl font-bold mt-1 text-green-400">
-                          ₹{tournament.prizePool}
-                        </h3>
-
-                      </div>
-
+to-[#171722]
+"
+                  ></div>
+                  <div className="py-4 px-3 bg-[#000000]">
+                    <div className="flex gap-4 justify-between items-center text-gray-400">
+                      <span className="flex gap-2 items-center font-bold text-sm ">
+                        <FaCalendar />{new Date(tournament.matchDate).toLocaleDateString("en-IN")}
+                      </span>
+                      <span className="text-sm flex gap-2 font-bold items-center">
+                        <FaUser /> {tournament.joinedPlayers}/{tournament.totalSlots}
+                      </span>
+                      <span className="flex gap-2 items-center font-bold text-gray-400 text-sm">
+                        <FaClock /> {tournament.matchTime}
+                      </span>
                     </div>
-
-                    {/* Map & Time */}
-
-                    <div className="flex justify-between mt-6 font-semibold text-sm text-gray-400">
-
-                      <span>
-                        🗺 {tournament.map}
-                      </span>
-
-                      <span>
-                        📅{" "}
-                        {new Date(tournament.matchDate).toLocaleDateString("en-IN")}
-                      </span>
-
-                    </div>
-
-                    <div className="flex justify-between mt-2 font-semibold text-sm text-gray-400">
-
-                      <span>
-                        ⏰ {tournament.matchTime}
-                      </span>
-
-                      <span>
-                        👥 {tournament.joinedPlayers}/{tournament.totalSlots}
-                      </span>
-
-                    </div>
-
-                    {/* ===============================
-                SLOT PROGRESS
-            =============================== */}
-
                     <div className="mt-6">
 
-                      <div className="flex justify-between font-semibold text-sm mb-2">
+                      <div className="flex justify-between mb-2">
 
-                        <span>Slots Filled</span>
+                        <span className="text-xs uppercase tracking-wider text-gray-500">
+                          Slots Filled
+                        </span>
 
-                        <span>
+                        <span className="font-bold text-violet-400">
                           {Math.floor(progress)}%
                         </span>
 
@@ -392,7 +390,6 @@ const BRTournament = () => {
                       </div>
 
                     </div>
-
                     {/* ===============================
                 BUTTONS
             =============================== */}
@@ -413,7 +410,7 @@ const BRTournament = () => {
                         <button
                           className="w-full py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold transition"
                         >
-                           On Live
+                          On Live
                         </button>
 
                       ) : (
@@ -467,7 +464,7 @@ const BRTournament = () => {
               </h2>
 
               <p className="text-gray-400 mt-3">
-                Try changing filters or search keywords.
+                Try changing filters .
               </p>
 
             </motion.div>
