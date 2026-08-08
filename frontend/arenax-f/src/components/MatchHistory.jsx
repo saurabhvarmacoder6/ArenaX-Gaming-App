@@ -56,20 +56,20 @@ export default function MatchHistory() {
 
                         const bg =
                             index === 0
-                                ? "bg-yellow-500/15 border-yellow-500/30"
+                                ? "border border-purple-600"
                                 : index === 1
-                                    ? "bg-gray-400/15 border-gray-400/30"
+                                    ? "border border-purple-600"
                                     : index === 2
-                                        ? "bg-orange-500/15 border-orange-500/30"
+                                        ? "border border-purple-600"
                                         : "bg-transparent";
 
                         const medal =
                             index === 0
-                                ? "🥇"
+                                ? "1"
                                 : index === 1
                                     ? "🥈"
                                     : index === 2
-                                        ? "🥉"
+                                        ? "2"
                                         : `#${index + 1}`;
 
                         return (
@@ -100,6 +100,9 @@ export default function MatchHistory() {
                         flex
                         items-center
                         justify-center
+                        border-cyan-400
+                        border
+                        text-white
                         font-bold
                     "
                                     >

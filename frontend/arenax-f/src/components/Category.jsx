@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FaFire } from "react-icons/fa";
+import { FaArrowRight, FaFire } from "react-icons/fa";
 import br from "../img/br.png";
 import cs from "../img/cs.png";
 import lw from "../img/lw.png";
@@ -34,7 +34,7 @@ const CategorySection = () => {
             Categories
           </h2>
 
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-zinc-500 font-semibold">
             Select your favorite game mode
           </p>
         </div>
@@ -60,6 +60,10 @@ const CategorySection = () => {
           </motion.button>
         ))}
 
+      </div>
+
+      <div className="py-3">
+        <h1 className="text-gray-400 text-sm flex items-center gap-4 font-semibold "><FaArrowRight/> Scroll For More Category</h1>
       </div>
 
     </section>

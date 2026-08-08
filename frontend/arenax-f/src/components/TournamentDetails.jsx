@@ -57,7 +57,7 @@ const TournamentDetails = () => {
 
 
     return (
-        <div className="min-h-screen bg-[#09090F] text-white pb-28">
+        <div className="min-h-screen bg-[#09090F] text-white pb-28 w-full">
 
             {/* ================= HEADER ================= */}
 
@@ -101,7 +101,7 @@ const TournamentDetails = () => {
 
             {/* ================= MAIN CARD ================= */}
 
-            <div className="px-5 -mt-14 relative z-20">
+            <div className="px-6 -mt-14 relative z-20">
 
                 <motion.div
 
@@ -117,9 +117,9 @@ const TournamentDetails = () => {
 
                     {/* Top */}
 
-                    <div className="p-6 border-b border-white/10">
+                    <div className="px-2 py-6 border-b border-white/10">
 
-                        <div className="flex justify-between gap-4 items-start">
+                        <div className="flex px-2 justify-between gap-4 items-start">
 
                             <div>
 
@@ -139,38 +139,40 @@ const TournamentDetails = () => {
 
                         </div>
 
-                        <div className="flex gap-3 mt-5">
+                        <div className="flex gap-2 mt-5 ">
 
-                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-red-700 text-white">
+                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-black text-purple-600 border border-purple-600">
 
                                 {tournamentDetail.mode}
 
                             </span>
 
-                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-blue-700 text-white">
+                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-black text-purple-600 border border-purple-600">
 
                                 {tournamentDetail.type}
 
                             </span>
+                            <span className="px-6 py-2 text-sm font-semibold rounded-full bg-black text-purple-600 border border-purple-600">
 
+                                {tournamentDetail?.map}
+
+                            </span>
 
 
                         </div>
                     </div>
 
-                    
-
                     {/* ================= GRID ================= */}
 
-                    <div className="grid grid-cols-2">
+                    <div className="grid grid-cols-3">
 
-                        <div className="border-r border-b border-white/10 p-5">
+                        <div className="border border-white/10 p-4 flex flex-col justify-center items-center gap-1">
 
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-400 font-bold text-sm">
                                 Entry Fee
                             </p>
 
-                            <h2 className="text-2xl font-bold text-green-400 mt-2">
+                            <h2 className="text-xl font-bold text-white">
 
                                 ₹{tournamentDetail.entryFee}
 
@@ -178,15 +180,15 @@ const TournamentDetails = () => {
 
                         </div>
 
-                        <div className="border-b border-white/10 p-5">
+                        <div className="border border-white/10 p-4 flex flex-col justify-center items-center gap-1">
 
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-400 font-bold text-sm">
 
                                 Per Kill
 
                             </p>
 
-                            <h2 className="text-2xl font-bold text-red-400 mt-2">
+                            <h2 className="text-xl font-bold text-white ">
 
                                 ₹{tournamentDetail.perKill}
 
@@ -194,15 +196,15 @@ const TournamentDetails = () => {
 
                         </div>
 
-                        <div className="border-r border-b border-white/10 p-5">
+                        <div className="border border-white/10 p-4 flex flex-col justify-center items-center gap-1">
 
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-400 font-bold text-sm">
 
                                 Prize Pool
 
                             </p>
 
-                            <h2 className="text-2xl font-bold text-yellow-400 mt-2">
+                            <h2 className="text-xl font-bold text-white ">
 
                                 ₹{tournamentDetail.prizePool}
 
@@ -210,15 +212,15 @@ const TournamentDetails = () => {
 
                         </div>
 
-                        <div className="border-b border-white/10 p-5">
+                        <div className="border border-white/10 p-4 flex flex-col justify-center items-center gap-1">
 
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-400 font-bold text-sm">
 
                                 Players
 
                             </p>
 
-                            <h2 className="text-2xl font-bold mt-2">
+                            <h2 className="text-xl font-bold ">
 
                                 {tournamentDetail.joinedPlayers}/{tournamentDetail.totalSlots}
 
@@ -226,15 +228,15 @@ const TournamentDetails = () => {
 
                         </div>
 
-                        <div className="border-r border-b border-white/10 p-5">
+                        <div className="border border-white/10 p-4 flex flex-col justify-center items-center gap-1">
 
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-400 font-bold text-sm">
 
                                 Date
 
                             </p>
 
-                            <h2 className="font-bold mt-2">
+                            <h2 className="font-bold ">
 
                                 {new Date(
                                     tournamentDetail.matchDate
@@ -244,48 +246,18 @@ const TournamentDetails = () => {
 
                         </div>
 
-                        <div className="border-b border-white/10 p-5">
+                        <div className="border border-white/10 p-4 flex flex-col justify-center items-center gap-1">
 
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-gray-400 font-bold text-sm">
 
                                 Time
 
                             </p>
 
-                            <h2 className="font-bold mt-2">
+                            <h2 className="font-bold ">
 
                                 {tournamentDetail.matchTime}
 
-                            </h2>
-
-                        </div>
-
-                        <div className="border-r border-white/10 p-5">
-
-                            <p className="text-gray-400 text-sm">
-
-                                Map
-
-                            </p>
-
-                            <h2 className="font-bold mt-2">
-
-                                {tournamentDetail?.map}
-
-                            </h2>
-
-                        </div>
-
-                        <div className="p-5">
-
-                            <p className="text-gray-400 text-sm">
-
-                                Slots Left
-
-                            </p>
-
-                            <h2 className="font-bold mt-2 text-violet-400">
-                                {slotsLeft}
                             </h2>
 
                         </div>
@@ -294,7 +266,7 @@ const TournamentDetails = () => {
 
                     {/* ================= PROGRESS ================= */}
 
-                    <div className="p-6 border-t border-white/10">
+                    <div className="p-6 border border-white/10">
 
                         <div className="flex justify-between mb-3">
 

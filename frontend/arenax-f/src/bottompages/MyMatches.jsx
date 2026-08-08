@@ -98,54 +98,49 @@ export default function MyMatches() {
                 STATUS FILTER
             ========================== */}
 
-            <div className="max-w-5xl mx-auto flex justify-center items-center px-5 mt-6">
 
                 <motion.div
-                    layout
-
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.25 }}
                     className="
-                    w-full
-                    flex
-                    gap-3
-                    overflow-x-auto
-                    scrollbar-hide
-                "
+    mt-4
+    m-3
+    p-1
+    rounded-2xl
+    bg-[#171722]
+    border border-white/10
+    shadow-[0_10px_30px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.05)]
+    grid grid-cols-3
+    gap-1
+  "
                 >
-
-                    {["Live", "Upcoming", "Completed"].map((status) => (
-
+                    {["Live", "Upcoming", "Completed"].map((item) => (
                         <button
-                            key={status}
-                            onClick={() => setSelectedStatus(status)}
+                            key={item}
+                            onClick={() => setSelectedStatus(item)}
                             className={`
-                            w-full
-                            px-4
-                            py-3
-                            rounded-full
-                            text-sm
-                            font-semibold
-                            whitespace-nowrap
-                            transition-all
-                            duration-300
+        py-3
+        rounded-xl
+        text-sm
+        font-semibold
+        transition-all
+        duration-300
 
-                            ${selectedStatus === status
-                                    ? status === "Live"
-                                        ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
-                                        : status === "Upcoming"
-                                            ? "bg-cyan-500 text-white shadow-lg shadow-cyan-500/30"
-                                            : "bg-slate-600 text-white shadow-lg shadow-slate-500/20"
-                                    : "bg-[#1B1E29] border border-white/10 hover:border-cyan-500"
+        ${selectedStatus === item
+                                    ? item === "Live"
+                                        ? "border border-red-500 text-white shadow-lg shadow-red-500/30"
+                                        : item === "Upcoming"
+                                            ? "border border-violet-600 text-white shadow-lg shadow-violet-500/30"
+                                            : "border border-slate-500 text-white shadow-lg shadow-slate-500/30"
+                                    : "hover:text-gray-400 text-white"
                                 }
-                        `}
+      `}
                         >
-                            {status}
+                            {item}
                         </button>
-
                     ))}
-
                 </motion.div>
-
-            </div>
 
             {/* ==========================
     MATCH LIST
@@ -202,12 +197,27 @@ export default function MyMatches() {
                                     <img
                                         src={banner}
                                         alt={item.tournament.title}
-                                        className="w-full h-44 object-cover"
+                                        className="w-full h-36 object-cover"
                                     />
+
+                                    <div
+                                        className={`absolute top-4 px-3 py-1 rounded-r-full text-xs font-bold
+
+  ${item.tournament.status === "Upcoming"
+                                                ? "bg-purple-600"
+                                                : tournament.status === "Live"
+                                                    ? "bg-red-500"
+                                                    : "bg-gray-500"
+                                            }
+
+`}
+                                    >
+                                        {item.tournament.status}
+                                    </div>
 
                                     <div className="absolute inset-0 bg-linear-to-t from-[#171722] to-transparent"></div>
 
-                                    <div className="absolute bottom-4 left-5">
+                                    <div className="absolute bottom-8 left-5">
 
                                         <h2 className="text-2xl font-bold">
                                             {item.tournament.title}
