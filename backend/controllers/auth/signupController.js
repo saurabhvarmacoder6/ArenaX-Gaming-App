@@ -67,7 +67,7 @@ export const signUp = async (req, res) => {
         }
         return res.status(500).json({
             success: false,
-            msg: "Internal Server Error"
+            msg: "Please Enter Valid Data"
         })
     } finally {
         if (session) {

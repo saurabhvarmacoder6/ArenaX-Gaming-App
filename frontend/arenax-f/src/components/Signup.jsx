@@ -151,8 +151,9 @@ const Signup = () => {
                     <div>
 
                         <label className="text-sm text-gray-300">
-                            Free Fire Game Name
+                            Free Fire Game Name (Max Length 12)
                         </label>
+                       
 
                         <div className="mt-2 flex items-center gap-3 rounded-2xl bg-[#181824] border border-white/10 px-4 h-14">
 
