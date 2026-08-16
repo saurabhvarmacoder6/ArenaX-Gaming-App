@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import Session from "../../models/Session.js";
+import Session from "../../models/session.js";
 import Users from "../../models/User.js";
 
 export const refreshAccessToken = async (req, res, next) => {

@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import Wallet from "../../models/Wallet.js";
-import Session from "../../models/Session.js";
+import Session from "../../models/session.js";
 
 export const signUp = async (req, res, next) => {
     const { name, email, gameName, uid, password } = req.body;

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import Users from "../../models/User.js";
-import Session from "../../models/Session.js";
+import Session from "../../models/session.js";
 
 export const resetPassword = async (req, res, next) => {
     try {

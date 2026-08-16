@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import Session from "../../models/Session.js";
+import Session from "../../models/session.js";
 
 export const Logout = async (req, res, next) => {
     try {
