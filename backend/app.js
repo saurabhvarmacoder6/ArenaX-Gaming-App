@@ -3,6 +3,8 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js"
 import paymentRoutes from "./routes/paymentRoutes.js";
 import cookieParser from "cookie-parser";
+import errorHandler from "./middleware/errorHandler.js";
+import notFound from "./middleware/notFound.js";
 const app = express();
 
 const allowedOrigins = [
@@ -32,5 +34,7 @@ app.use("/api/payment", paymentRoutes);
 app.get("/", (req, res) => {
     res.send("Server Working")
 })
+app.use(notFound)
+app.use(errorHandler)
 
 export default app;

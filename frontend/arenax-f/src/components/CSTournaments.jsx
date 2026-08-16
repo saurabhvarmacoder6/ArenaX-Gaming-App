@@ -210,7 +210,7 @@ const CSTournament = () => {
     TOURNAMENT CARDS
 =============================== */}
 
-        <div className="mt-8 space-y-6 border border-purple-600 rounded-xl">
+        <div className="mt-8 space-y-6 rounded-xl">
 
           {filteredTournament.length > 0 ? (
 
@@ -232,7 +232,7 @@ const CSTournament = () => {
                   whileHover={{
                     scale: 1.015,
                   }}
-                  className="rounded-xl overflow-hidden border border-white/10 bg-[#171722]"
+                  className="rounded-xl overflow-hidden border-2 border-gray-600 bg-[#171722]"
                 >
 
                   {/* ===============================

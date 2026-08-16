@@ -1,24 +1,24 @@
-import User from "../.././models/User.js"
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
-import mongoose from "mongoose"
-import Wallet from "../../models/Wallet.js"
+import User from "../.././models/User.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+import Wallet from "../../models/Wallet.js";
+import Session from "../../models/Session.js";
 
-export const signUp = async (req, res) => {
+export const signUp = async (req, res, next) => {
     const { name, email, gameName, uid, password } = req.body;
-    if (!name || !email || !gameName || !uid || !password) {
-        return res.send({
-            msg: "userdata invalid",
-            success: false
-        })
-    }
 
     let session;
 
     try {
+        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Start MongoDB transaction
         session = await mongoose.startSession();
         session.startTransaction();
+
+        // Create user
         const user = new User({
             name,
             email,
@@ -26,53 +26,92 @@ export const signUp = async (req, res) => {
             uid,
             password: hashedPassword
         });
+
         await user.save({ session });
 
+        // Create wallet
         const wallet = new Wallet({
             userId: user._id,
             balance: 0
-        })
+        });
+
         await wallet.save({ session });
-        console.log("wallet saved");
+
+        // Create refresh token
+        const refreshToken = jwt.sign(
+            {
+                userId: user._id,
+                role: user.role,
+                userName: user.name
+            },
+            process.env.REFRESH_SECRET_KEY,
+            {
+                expiresIn: "7d"
+            }
+        );
+
+        // Hash refresh token before storing it
+        const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+
+        // Create session
+        const userSession = new Session({
+            userId: user._id,
+            refreshTokenHash,
+            expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        });
+
+        await userSession.save({ session });
+
+        // Commit transaction
         await session.commitTransaction();
+
+        // Create access token
+        const accessToken = jwt.sign(
+            {
+                userId: user._id,
+                role: user.role,
+                userName: user.name
+            },
+            process.env.ACCESS_SECRET_KEY,
+            {
+                expiresIn: "15m"
+            }
+        );
+
+        // Remove password from response
         const userObject = user.toObject();
         delete userObject.password;
 
-        jwt.sign(
-            { userId: user._id, role: user.role, userName: user.name }
-            , process.env.JWT_SECRET, { expiresIn: '6d' }, (error, token) => {
-                if (error) {
-                    return res.status(500).json({
-                        success: false,
-                        msg: "JWT generation failed"
-                    });
-                }
-                res.cookie("token", token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === "production",
-                    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-                    maxAge: 6 * 24 * 60 * 60 * 1000
-                })
-                return res.status(201).json({
-                    success: true,
-                    msg: "Signup successful",
-                    user: userObject
-                });
+        // Store refresh token in HttpOnly cookie
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite:
+                process.env.NODE_ENV === "production"
+                    ? "none"
+                    : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
-            })
+        return res.status(201).json({
+            success: true,
+            msg: "Signup successful",
+            user: userObject,
+            accessToken
+        });
+
     } catch (error) {
-        console.error(error)
+
         if (session) {
             await session.abortTransaction();
         }
-        return res.status(500).json({
-            success: false,
-            msg: "Please Enter Valid Data"
-        })
+
+        next(error);
+
     } finally {
+
         if (session) {
             await session.endSession();
         }
     }
-}
-
+};

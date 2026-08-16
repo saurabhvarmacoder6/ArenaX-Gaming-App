@@ -12,9 +12,10 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom"
 import Homehead from "../components/Homehead";
+import { showSuccess } from "../utils/toast";
 
 export default function Profile() {
-    const { user, setUser } = useContext(AuthContext);
+    const { user, setUser, setAccessToken } = useContext(AuthContext);
     const navigate = useNavigate()
 
     const handleLogout = async () => {
@@ -23,10 +24,11 @@ export default function Profile() {
                 method: "POST",
                 credentials: "include",
             });
-
+            showSuccess(res.msg)
             const result = await res.json();
 
             if (res.ok) {
+                setAccessToken(null)
                 setUser(null);
                 navigate("/login", { replace: true });
             } else {

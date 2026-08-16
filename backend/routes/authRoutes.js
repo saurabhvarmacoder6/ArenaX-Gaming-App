@@ -24,14 +24,18 @@ import { updatePlayerKills } from "../controllers/tournaments/updateKillsControl
 import { createNotification } from "../controllers/notifications/createNotificationController.js";
 import { getNotifications } from "../controllers/notifications/getNotificationController.js";
 import { deleteNotification } from "../controllers/notifications/deleteNotificationController.js";
+import validateUser from "../middleware/validateUser.js";
+import { refreshAccessToken } from "../controllers/auth/refreshTokenController.js";
+import { loginLimiter, otpRequestLimiter, otpVerifyLimiter } from "../middleware/rateLimiter.js";
 
 const router = express.Router();
 
-router.post("/signup", signUp);
-router.post("/login", Login);
+router.post("/signup", validateUser, signUp);
+router.post("/login", loginLimiter, Login);
 router.post("/logout", Logout);
-router.post("/forgot-password", forgotPassword);
-router.post("/verify-otp", verifyOtp);
+router.post("/refresh", refreshAccessToken);
+router.post("/forgot-password", otpRequestLimiter, forgotPassword);
+router.post("/verify-otp", otpVerifyLimiter, verifyOtp);
 router.post("/reset-password", resetPassword);
 router.get("/me", verifyToken, FindMe);
 router.get("/balance", verifyToken, getBalance);
@@ -52,6 +56,6 @@ router.get("/tournament/:id/joined-players", verifyToken, getJoinedPlayers);
 router.get("/my-matches", verifyToken, getMyMatches);
 router.post("/notification", verifyToken, verifyAdmin, createNotification);
 router.get("/get-notifications", verifyToken, getNotifications);
-router.delete("/notification/:id",verifyToken,verifyAdmin,deleteNotification);
+router.delete("/notification/:id", verifyToken, verifyAdmin, deleteNotification);
 
 export default router; 

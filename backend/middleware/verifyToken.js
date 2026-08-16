@@ -2,16 +2,25 @@ import jwt from "jsonwebtoken";
 import Users from "../models/User.js";
 
 const verifyToken = async (req, res, next) => {
-    const token = req.cookies.token;
-    if (!token) {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({
             success: false,
-            msg: "Unauthorized. Please login first."
+            msg: "Unauthorized. Access token required."
         });
     }
+
+    const accessToken = authHeader.split(" ")[1];
+
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await Users.findById(decoded.userId).select("isBlocked");
+        const decoded = jwt.verify(
+            accessToken,
+            process.env.ACCESS_SECRET_KEY
+        );
+
+        const user = await Users.findById(decoded.userId)
+            .select("isBlocked");
 
         if (!user) {
             return res.status(404).json({
@@ -26,13 +35,15 @@ const verifyToken = async (req, res, next) => {
                 msg: "Your account has been blocked."
             });
         }
+
         req.user = decoded;
+
         next();
 
     } catch (error) {
         return res.status(401).json({
             success: false,
-            msg: "Invalid or expired token."
+            msg: "Invalid or expired access token."
         });
     }
 };

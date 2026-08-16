@@ -20,7 +20,7 @@ const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate()
-    const { setUser } = useContext(AuthContext)
+    const { setUser, setAccessToken } = useContext(AuthContext)
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -35,6 +35,7 @@ const Signup = () => {
             showSuccess(data.msg)
             if (data.success) {
                 setUser(data.user);
+                setAccessToken(data.accessToken);
                 navigate("/home");
             }
 

@@ -16,7 +16,7 @@ import { showError, showSuccess } from "../utils/toast";
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate()
-    const { setUser } = useContext(AuthContext)
+    const { setUser, setAccessToken } = useContext(AuthContext)
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -28,6 +28,7 @@ const Login = () => {
             showSuccess(data.msg)
             if (data.success) {
                 setUser(data.user);
+                setAccessToken(data.accessToken);
                 navigate("/home");
             } else {
                 alert("Enter Valid Email Or Password");

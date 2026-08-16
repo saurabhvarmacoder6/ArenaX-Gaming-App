@@ -26,13 +26,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        maxlength: 16,
         trim: true
     },
     password: {
         type: String,
         required: true,
-        minlength: 8,
+        minlength: 6,
         unique: false
+    },
+    resetOtpAttempts: {
+        type: Number,
+        default: 0,
+    },
+
+    resetOtpSentAt: {
+        type: Date,
+        default: null,
     },
     resetOtp: {
         type: String,
