@@ -32,7 +32,7 @@ export default function Loading() {
           </motion.h2>
 
           <p className="text-gray-400 text-sm mt-2">
-            Checking authentication...
+            Loading...
           </p>
         </div>
       </div>
